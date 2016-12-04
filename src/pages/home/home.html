@@ -18,7 +18,7 @@
       <p *ngIf="dtService.fuelPressure">Fuel Pressure: {{ dtService.fuelPressure }}</p>
     </md-card-content>
     <md-card-actions>
-      <button md-button (click)="dtService.connectDevice(device)">Connect</button>
+      <button md-button (click)="dtService.connect(device)">Connect</button>
       <button md-button (click)="dtService.removeDevice(device)">Remove</button>
     </md-card-actions>
   </md-card>

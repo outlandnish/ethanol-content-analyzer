@@ -13,8 +13,9 @@ export class DeliciousTuningService {
     device: StoredDevice
     storage: Storage
     connection: Observable<any>
+    connected: boolean
     ethanol: number
-    fuelPressure: number  
+    fuelPressure: number
 
     constructor(storage: Storage) {
         this.loadSetupDevices()
@@ -43,22 +44,15 @@ export class DeliciousTuningService {
         await this.getDevices()
     }
 
-    async connectDevice(device: StoredDevice) {
+    async connect(device: StoredDevice) {
         try {
             this.device = device
             console.log(`trying to connect to ${device.address}`)
             this.connection = BluetoothSerial.connect(device.address)
             this.connection.subscribe(async result => {
                 console.log(`connected to ${device.address}`)
-                console.log('sending write request')
-                await BluetoothSerial.write("---+++---S\n")
-                console.log('sent. waiting for data...')
-                var received = BluetoothSerial.subscribe('\r\r')
-                received.subscribe(d => {
-                    this.parseData(d)
-                }, e => {
-                    console.error(e)
-                })
+                this.connected = true
+                // emit connected
             })
         }
         catch (err) {
@@ -67,15 +61,60 @@ export class DeliciousTuningService {
         }
     }
 
+    async streamData() {
+        await this.toggleRead()
+        var subscription = BluetoothSerial.subscribe('\r\r')
+        subscription.subscribe(d => {
+            var parsed = this.parseData(d)
+            if (parsed.output) {
+                this.ethanol = parsed.ethanol
+                this.fuelPressure = parsed.fuelPressure
+            }
+            // emit this data
+        }, e => {
+            console.error(e)
+        })
+    }
+
+    async getDeviceInfo() {
+        await this.toggleRead()
+        var data = await BluetoothSerial.readUntil('\r\r')
+        var result = this.parseData(data)
+        await this.toggleRead()
+        return result.info
+    }
+
+    async disconnect() {
+        await this.toggleRead()
+        //if (this.connection)
+        // disconnect from device here
+        this.connected = false
+    }
+
+    async toggleRead() {
+        await BluetoothSerial.write("---+++---S\n")
+    }
+
     parseData(data) {
-        let split = data.replace(' ', '').split('\t')
-        for (let part of split) {
-            if (part.contains('ETHANOL'))
-                this.ethanol = parseFloat(part.split('=')[1]) / 5.0
-            else if (part.contains('FuelT(C)'))
-                this.fuelPressure = parseFloat(part.split('=')[1]) / 5.0
-            else if (part.contains('ID'))
-                this.device.nickname = part.split('=')[1]
+        let ethanol = null, fuelPressure = null, info = null
+        if (data.indexOf("OUTPUT OFF") >= 0) {
+            return { ethanol, fuelPressure, info, output: false }
+        }
+        else {
+            let split = data.replace(' ', '').split('\t')
+
+            for (let part of split) {
+                var field = part.split('=')
+                if (field.indexOf('ETHANOL') >= 0)
+                    ethanol = parseFloat(field[1]) / 5.0
+                else if (field.indexOf('FuelT(C)') >= 0) {
+                    fuelPressure = parseFloat(field[1]) / 5.0
+                    fuelPressure = fuelPressure <= 1.5 ? 0 : fuelPressure
+                }
+                else if (field.indexOf('ID') >= 0)
+                    info = this.parseDeviceInfo(field[1])
+            }
+            return { ethanol, fuelPressure, info, output: true }
         }
     }
 
@@ -97,5 +136,10 @@ export class DeliciousTuningService {
         return { unpaired, unpairedListener }
     }
 
-    
+    parseDeviceInfo(id) {
+        var split = id.split(' - ')
+        let vehicle = split[0]
+        let version = split[1].replace('Mk', 'Mark ')
+        return { vehicle, version }
+    }
 }
