@@ -25,12 +25,12 @@ import { reducer } from './reducers'
     HomePageComponent
   ],
   imports: [
-    CommonModule,
     IonicModule.forRoot(AppComponent),
+    CommonModule,
     MaterialModule.forRoot(),
     StoreModule.provideStore(reducer),
-    EffectsModule.run(FlexFuelEffects),
     EffectsModule.run(BluetoothEffects)
+    //EffectsModule.run(FlexFuelEffects)
   ],
   bootstrap: [IonicApp],
   entryComponents: [

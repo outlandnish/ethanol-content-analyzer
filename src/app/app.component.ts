@@ -1,21 +1,18 @@
 import { Component } from '@angular/core'
 
-import { Store } from '@ngrx/store'
-
 import { Platform } from 'ionic-angular'
 import { StatusBar, Splashscreen } from 'ionic-native'
 
-import * as fromRoot from './reducers'
-import { HomePage } from '../pages/home/home'
+import { HomePageComponent } from './containers/home.page'
 
 
 @Component({
   templateUrl: 'app.html'
 })
 export class AppComponent {
-  rootPage = HomePage
+  rootPage = HomePageComponent
 
-  constructor(platform: Platform, private store: Store<fromRoot.State>) {
+  constructor(platform: Platform) {
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.

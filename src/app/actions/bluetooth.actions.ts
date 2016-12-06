@@ -11,8 +11,9 @@ export const ActionTypes = {
 
 export class LoadPairedBluetoothDevicesAction implements Action {
     type = ActionTypes.LOAD_PAIRED_BLUETOOTH_DEVICES
+    payload = null
 
-    constructor(public payload: any) { }
+    constructor() { }
 }
 
 export class LoadPairedBluetoothDevicesSuccessAction implements Action {

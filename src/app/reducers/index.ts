@@ -15,7 +15,7 @@ export interface State {
 }
 
 const reducers = {
-    bluetooth: BluetoothReducer.reducer
+    bluetoothDevices: BluetoothReducer.reducer
 }
 
 const developmentReducer: ActionReducer<State> = compose(storeFreeze, combineReducers)(reducers)

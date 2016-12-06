@@ -20,11 +20,7 @@ export class HomePageComponent {
     constructor(
         private nav: NavController,
         private store: Store<fromRoot.State>) {
-    }
-
-    ionViewLoaded() {
-        //this.flexFuelDevices = this.store.select(state => state.flexFuelDevices)
-        this.bluetoothDevices = this.store.select(state => state.bluetoothDevices)
+        this.bluetoothDevices = store.select(fromRoot.getBluetoothDevices)
     }
 
     connect(device: FlexFuelDevice) {
