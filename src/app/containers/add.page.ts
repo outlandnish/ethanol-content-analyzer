@@ -1,7 +1,8 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core'
-import { Modal, NavController } from 'ionic-angular'
+import { NavController } from 'ionic-angular'
 import { Store } from '@ngrx/store'
-import { Observable } from 'rxjs/rx'
+
+import * as fromRoot from '../reducers'
 
 @Component({
   selector: 'page-add',
@@ -9,4 +10,8 @@ import { Observable } from 'rxjs/rx'
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AddPageComponent {
+  constructor(
+        private nav: NavController,
+        private store: Store<fromRoot.State>) {
+    }
 }

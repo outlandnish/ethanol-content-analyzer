@@ -12,13 +12,9 @@ import 'hammerjs'
 import { AppComponent } from './app.component'
 import { HomePageComponent } from './containers/home.page'
 
-import { provideStore } from '@ngrx/store'
-
-import { FlexFuelReducers } from 'reducers/flexfuel.reducers'
-import { FlexFuelService } from 'services/flexfuel.service'
-
-import { FlexFuelEffects } from 'effects/flexfuel.effects'
-import { BluetoothEffects } from 'effects/bluetooth.effects'
+import { FlexFuelService } from './services/flexfuel.service'
+import { FlexFuelEffects } from './effects/flexfuel.effects'
+import { BluetoothEffects } from './effects/bluetooth.effects'
 
 import { reducer } from './reducers'
 

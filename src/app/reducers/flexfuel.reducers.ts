@@ -1,4 +1,3 @@
-import { ActionReducer, Action } from '@ngrx/store'
 import * as FlexFuelActions from '../actions/flexfuel.actions'
 
 export function FlexFuelListReducer(state = [], action) {

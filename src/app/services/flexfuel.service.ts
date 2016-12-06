@@ -1,12 +1,11 @@
 import { Injectable } from '@angular/core'
 import { Platform } from 'ionic-angular'
-import { Observable, Subscription, Subscriber } from 'rxjs/rx'
+import { Observable, Subscription } from 'rxjs/rx'
 
 import { BluetoothSerial } from 'ionic-native'
 import { Storage } from '@ionic/storage'
 
 import { FlexFuelDevice } from '../models/devices'
-import { FlexFuelData } from '../models/flexfuel-data'
 
 @Injectable()
 export class FlexFuelService {
@@ -36,7 +35,8 @@ export class FlexFuelService {
         if (!this.ready)
             await this.init()
 
-        return await BluetoothSerial.list()
+        let devices = await BluetoothSerial.list()
+        return devices.filter(d => d.name.indexOf('DT-') == 0)
     }
 
     async addDevice(device: FlexFuelDevice) {
@@ -47,18 +47,6 @@ export class FlexFuelService {
     async removeDevice(device: FlexFuelDevice) {
         //this.devices = this.devices.filter(d => d.id != device.id)
         //await this.storage.set('devices', this.devices)
-    }
-
-    flexFuelChanges() {
-        Observable.create(observer => {
-            this.
-        })
-    }
-
-    bluetoothDeviceChanges() {
-        Observable.create(observer => {
-
-        })
     }
 
     async connect(device: FlexFuelDevice) {
@@ -161,9 +149,9 @@ export class FlexFuelService {
     }
 
     parseFlexFuelData(data) {
-        let ethanol = null, fuelPressure = null, info = null
+        let ethanol = null, fuelPressure = null, vehicle = null, version = null
         if (data.indexOf("OUTPUT OFF") >= 0) {
-            return { ethanol, fuelPressure, info, output: false }
+            return { ethanol, fuelPressure, vehicle, version, output: false }
         }
         else {
             let split = data.replace(' ', '').split('\t')
@@ -177,9 +165,9 @@ export class FlexFuelService {
                     fuelPressure = fuelPressure <= 1.5 ? 0 : fuelPressure
                 }
                 else if (field.indexOf('ID') >= 0)
-                    info = this.parseFlexFuelDeviceInfo(field[1])
+                    { vehicle, version } this.parseFlexFuelDeviceInfo(field[1])
             }
-            return { ethanol, fuelPressure, info, output: true }
+            return { ethanol, fuelPressure, vehicle, version, output: true }
         }
     }
 

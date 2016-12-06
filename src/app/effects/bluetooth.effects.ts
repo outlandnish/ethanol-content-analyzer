@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core';
 import { Effect, Actions } from '@ngrx/effects';
-import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs/rx';
 
 import * as BluetoothActions from '../actions/bluetooth.actions'
 import { FlexFuelService } from '../services/flexfuel.service'

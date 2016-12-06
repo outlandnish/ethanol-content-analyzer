@@ -1,5 +1,5 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core'
-import { Modal, NavController } from 'ionic-angular'
+import { NavController } from 'ionic-angular'
 import { Store } from '@ngrx/store'
 import { Observable } from 'rxjs/rx'
 

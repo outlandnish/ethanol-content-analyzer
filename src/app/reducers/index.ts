@@ -1,7 +1,6 @@
 import { isDevMode } from '@angular/core'
 
 import { ActionReducer, combineReducers } from '@ngrx/store'
-import * as fromRouter from '@ngrx/router-store'
 import { compose } from '@ngrx/core/compose'
 import { storeFreeze } from 'ngrx-store-freeze'
 

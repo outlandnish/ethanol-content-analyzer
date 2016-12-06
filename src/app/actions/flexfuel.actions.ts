@@ -1,8 +1,6 @@
-import { Injectable } from '@angular/core'
 import { Action } from '@ngrx/store'
 
 import { FlexFuelDevice } from '../models/devices'
-import { FlexFuelData } from '../models/flexfuel-data'
 
 export const ActionTypes = {
     LOAD_FLEXFUEL: 'LOAD_FLEXFUEL_DEVICES',
