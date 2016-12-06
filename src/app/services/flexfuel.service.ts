@@ -5,7 +5,6 @@ import { Observable, Subscription, Subscriber } from 'rxjs/rx'
 import { BluetoothSerial } from 'ionic-native'
 import { Storage } from '@ionic/storage'
 
-import AppState from './app-state'
 import { FlexFuelDevice } from '../models/devices'
 import { FlexFuelData } from '../models/flexfuel-data'
 
@@ -33,7 +32,7 @@ export class FlexFuelService {
         return await this.storage.get('devices')
     }
 
-    async listUnpairedDevices() {
+    async listPairedDevices() {
         if (!this.ready)
             await this.init()
 

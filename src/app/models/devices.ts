@@ -5,8 +5,9 @@ export interface BluetoothDevice {
     name: string
 }
 
-export class FlexFuelDevice implements BluetoothDevice {
+export interface FlexFuelDevice extends BluetoothDevice {
     image: string
     nickname: string
     vehicle: string
+    version: string
 }

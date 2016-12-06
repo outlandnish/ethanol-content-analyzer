@@ -18,7 +18,7 @@
       <button md-button (click)="remove(device)">Remove</button>
     </md-card-actions>
   </md-card>
-  <md-card *ngFor="let device of pairedDevices">
+  <md-card *ngFor="let device of bluetoothDevices | async">
     <md-card-title-group>
       <img md-card-sm-image src="assets/dt.png">
       <md-card-title>{{ device.name }}</md-card-title>

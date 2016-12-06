@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core'
+/*import { Injectable } from '@angular/core'
 import { Observable } from 'rxjs/observable'
 import { BluetoothSerial } from 'ionic-native'
 import { Storage } from '@ionic/storage'
@@ -142,4 +142,4 @@ export class DeliciousTuningService {
         let version = split[1].replace('Mk', 'Mark ')
         return { vehicle, version }
     }
-}
+}*/
