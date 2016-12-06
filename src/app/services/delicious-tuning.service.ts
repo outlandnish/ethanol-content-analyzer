@@ -4,13 +4,13 @@ import { BluetoothSerial } from 'ionic-native'
 import { Storage } from '@ionic/storage'
 import * as _ from 'lodash'
 
-import { BluetoothDevice, StoredDevice } from '../models/devices'
+import { BluetoothDevice, FlexFuelDevice } from '../models/devices'
 
 @Injectable()
 export class DeliciousTuningService {
-    setupDevices: StoredDevice[] = []
+    setupDevices: FlexFuelDevice[] = []
     pairedDevices: BluetoothDevice[] = []
-    device: StoredDevice
+    device: BluetoothDevice
     storage: Storage
     connection: Observable<any>
     connected: boolean
@@ -32,19 +32,19 @@ export class DeliciousTuningService {
         await this.storage.set('devices', this.setupDevices)
     }
 
-    async addDevice(device: StoredDevice) {
+    async addDevice(device: FlexFuelDevice) {
         this.setupDevices.push(device)
         await this.saveSetupDevices()
         await this.getDevices()
     }
 
-    async removeDevice(device: StoredDevice) {
+    async removeDevice(device: FlexFuelDevice) {
         this.setupDevices = this.setupDevices.filter(d => d.id != device.id)
         await this.saveSetupDevices()
         await this.getDevices()
     }
 
-    async connect(device: StoredDevice) {
+    async connect(device: BluetoothDevice) {
         try {
             this.device = device
             console.log(`trying to connect to ${device.address}`)

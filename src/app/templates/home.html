@@ -1,0 +1,32 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      Ethanol Content Analyzer
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <md-card *ngFor="let device of flexFuelDevices | async">
+    <md-card-title-group>
+      <img md-card-lg-image src="{{ device.image }}">
+      <md-card-title>{{ device.vehicle }}</md-card-title>
+      <md-card-subtitle>({{ device.name }})</md-card-subtitle>
+    </md-card-title-group>
+    <md-card-actions>
+      <button md-button (click)="connect(device)">Connect</button>
+      <button md-button (click)="remove(device)">Remove</button>
+    </md-card-actions>
+  </md-card>
+  <md-card *ngFor="let device of pairedDevices">
+    <md-card-title-group>
+      <img md-card-sm-image src="assets/dt.png">
+      <md-card-title>{{ device.name }}</md-card-title>
+      <md-card-subtitle>Setup required</md-card-subtitle>
+    </md-card-title-group>
+    <md-card-actions>
+      <button md-button (click)="setup(device)">Setup</button>
+      <button md-button (click)="ignore(device)">Ignore</button>
+    </md-card-actions>
+  </md-card>
+</ion-content>
