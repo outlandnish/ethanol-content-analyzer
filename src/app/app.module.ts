@@ -29,7 +29,7 @@ import { reducer } from './reducers'
     CommonModule,
     MaterialModule.forRoot(),
     StoreModule.provideStore(reducer),
-    EffectsModule.run(BluetoothEffects)
+    EffectsModule.run(BluetoothEffects),
     EffectsModule.run(FlexFuelEffects)
   ],
   bootstrap: [IonicApp],

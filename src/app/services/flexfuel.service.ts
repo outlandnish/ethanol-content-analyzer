@@ -91,7 +91,7 @@ export class FlexFuelService {
     }
 
     async getFlexFuelInfo() {
-        let vehicle = null, version = null, image = null
+        let vehicle = null, version = null
         if (!this.ready)
             await this.init()
 
