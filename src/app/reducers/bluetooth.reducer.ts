@@ -30,7 +30,8 @@ export function reducer(state = initialState, action: bluetooth.Actions): State 
         case bluetooth.ActionTypes.LOAD_PAIRED_BLUETOOTH_DEVICES_FAIL:
             console.error('failed to load paired bluetooth devices')
             return Object.assign({}, state, {
-                loading: false
+                loading: false,
+                loaded: false
             })
         case bluetooth.ActionTypes.HIDE_PAIRED_BLUETOOTH_DEVICE:
             const device = action.payload

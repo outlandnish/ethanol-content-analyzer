@@ -15,6 +15,7 @@ export class FlexFuelService {
     connection: Subscription
     streamer: Subscription
     reading: boolean
+    device: FlexFuelDevice
 
     constructor(
         private platform: Platform,
@@ -51,6 +52,7 @@ export class FlexFuelService {
 
     async connect(device: FlexFuelDevice) {
         this.connecting = true
+        this.device = device
         // emit action for connecting
         if (!this.ready)
             await this.init()
@@ -89,15 +91,20 @@ export class FlexFuelService {
     }
 
     async getFlexFuelInfo() {
+        let vehicle = null, version = null, image = null
         if (!this.ready)
             await this.init()
 
         await this.toggleRead()
         var data = await BluetoothSerial.readUntil('\r\r')
-        var result = this.parseFlexFuelData(data)
+        { vehicle, version } this.parseFlexFuelData(data)
+
         await this.toggleRead()
 
-        return result
+        return Object.assign({}, this.device, {
+            vehicle, 
+            version
+        })
     }
 
     async toggleRead() {

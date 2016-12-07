@@ -30,7 +30,7 @@ import { reducer } from './reducers'
     MaterialModule.forRoot(),
     StoreModule.provideStore(reducer),
     EffectsModule.run(BluetoothEffects)
-    //EffectsModule.run(FlexFuelEffects)
+    EffectsModule.run(FlexFuelEffects)
   ],
   bootstrap: [IonicApp],
   entryComponents: [

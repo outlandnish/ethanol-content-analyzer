@@ -16,11 +16,17 @@ import { FlexFuelDevice, BluetoothDevice } from '../models/devices'
 export class HomePageComponent {
     public flexFuelDevices: Observable<FlexFuelDevice[]>
     public bluetoothDevices: Observable<BluetoothDevice[]>
+    private connecting: Observable<boolean>
+    private connected: Observable<boolean>
 
     constructor(
         private nav: NavController,
         private store: Store<fromRoot.State>) {
         this.bluetoothDevices = store.select(fromRoot.getBluetoothDevices)
+        this.flexFuelDevices = store.select(fromRoot.getFlexFuelDevices)
+        this.connecting = store.select(fromRoot.getFlexFuelDevicesConnecting)
+        this.connected = store.select(fromRoot.getFlexFuelDevicesConnected)
+
     }
 
     connect(device: FlexFuelDevice) {
@@ -41,7 +47,7 @@ export class HomePageComponent {
         })
         Object.assign(flexFuelDevice, device)
 
-        this.store.dispatch(new FlexFuelActions.SetupFlexFuelDeviceAction(flexFuelDevice))
+        this.store.dispatch(new FlexFuelActions.ConnectFlexFuelDeviceAction(flexFuelDevice))
     }
 
     ignore(device: BluetoothDevice) {
