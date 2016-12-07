@@ -8,6 +8,9 @@ import * as FlexFuelActions from '../actions/flexfuel.actions'
 import * as BluetoothDeviceActions from '../actions/bluetooth.actions'
 import { FlexFuelDevice, BluetoothDevice } from '../models/devices'
 
+import AddPage from './add.page'
+import ViewPage from './view.page'
+
 @Component({
   selector: 'page-home',
   templateUrl: '../templates/home.html',
@@ -39,15 +42,7 @@ export class HomePageComponent {
 
     setup(device: BluetoothDevice) {
         //this.nav.push(AddPage, { device: device })
-        let flexFuelDevice = Object.assign({}, device, {
-            image: null,
-            nickname: null,
-            vehicle: null,
-            version: null
-        })
-        Object.assign(flexFuelDevice, device)
-
-        this.store.dispatch(new FlexFuelActions.ConnectFlexFuelDeviceAction(flexFuelDevice))
+        this.nav.push(AddPage, { device })       
     }
 
     ignore(device: BluetoothDevice) {
