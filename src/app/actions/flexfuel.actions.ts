@@ -62,9 +62,9 @@ export class ConnectFlexFuelDeviceAction implements Action {
 
 export class ConnectFlexFuelDeviceSuccessAction implements Action {
     type = ActionTypes.CONNECT_FLEXFUEL_SUCCESS
-    payload = null
+    payload= null
 
-    constructor() { }
+    constructor() { } 
 }
 
 export class ConnectFlexFuelDeviceFailAction implements Action {

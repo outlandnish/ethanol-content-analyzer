@@ -11,6 +11,8 @@ import 'hammerjs'
 
 import { AppComponent } from './app.component'
 import { HomePageComponent } from './containers/home.page'
+import { AddPageComponent } from './containers/add.page'
+import { ViewPageComponent } from './containers/view.page'
 
 import { FlexFuelService } from './services/flexfuel.service'
 import { FlexFuelEffects } from './effects/flexfuel.effects'
@@ -22,7 +24,9 @@ import { reducer } from './reducers'
 @NgModule({
   declarations: [
     AppComponent,
-    HomePageComponent
+    HomePageComponent,
+    AddPageComponent,
+    ViewPageComponent
   ],
   imports: [
     IonicModule.forRoot(AppComponent),
@@ -35,7 +39,9 @@ import { reducer } from './reducers'
   bootstrap: [IonicApp],
   entryComponents: [
     AppComponent,
-    HomePageComponent
+    HomePageComponent,
+    AddPageComponent,
+    ViewPageComponent
   ],
   providers: [
     { provide: ErrorHandler, useClass: IonicErrorHandler },

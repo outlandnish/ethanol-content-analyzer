@@ -8,13 +8,13 @@ import * as FlexFuelActions from '../actions/flexfuel.actions'
 import * as BluetoothDeviceActions from '../actions/bluetooth.actions'
 import { FlexFuelDevice, BluetoothDevice } from '../models/devices'
 
-import AddPage from './add.page'
-import ViewPage from './view.page'
+import { AddPageComponent } from './add.page'
+import { ViewPageComponent } from './view.page'
 
 @Component({
-  selector: 'page-home',
-  templateUrl: '../templates/home.html',
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'page-home',
+    templateUrl: '../templates/home.html',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HomePageComponent {
     public flexFuelDevices: Observable<FlexFuelDevice[]>
@@ -41,8 +41,8 @@ export class HomePageComponent {
     }
 
     setup(device: BluetoothDevice) {
-        //this.nav.push(AddPage, { device: device })
-        this.nav.push(AddPage, { device })       
+        //this.nav.push(AddPage, {  device: device })
+        this.nav.push(AddPageComponent, { device })
     }
 
     ignore(device: BluetoothDevice) {

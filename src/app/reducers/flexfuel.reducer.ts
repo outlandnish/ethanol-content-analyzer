@@ -38,7 +38,6 @@ export function reducer(state = initialState, action: flexfuel.Actions): State {
                 connected: true
             })
         case flexfuel.ActionTypes.CONNECT_FLEXFUEL_ERROR:
-            console.error('failed to connect to flex fuel device')
             return Object.assign({}, state, {
                 connecting: false,
                 connected: false

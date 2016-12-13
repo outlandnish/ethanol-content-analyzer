@@ -53,30 +53,18 @@ export class FlexFuelService {
     async connect(device: FlexFuelDevice) {
         this.connecting = true
         this.device = device
-        // emit action for connecting
         if (!this.ready)
             await this.init()
-        try {
-            let connection = BluetoothSerial.connect(device.address)
-            this.connection = connection.subscribe(
-                success => {
-                    this.connected = false
-                    this.connected = true
-                    // emit action for connected
-                },
-                error => {
-                    this.connected = false
-                    this.connected = false
-                    // emit action for device connection error
-                    console.error('connection error', error)
-                }
-            )
+        let connection = BluetoothSerial.connect(device.address)
+        await connection
+            .flatMap(c => this.setConnection(c))
+            .toPromise()
+    }
 
-        }
-        catch (err) {
-            console.error('connection error', err)
-            // emit action for device connection error
-        }
+    setConnection(connection) {
+        console.log('connected to flex fuel device')
+        this.connection = connection
+        return connection
     }
 
     async disconnect() {

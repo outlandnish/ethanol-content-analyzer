@@ -8,15 +8,18 @@ import { createSelector } from 'reselect';
 
 import * as BluetoothReducer from './bluetooth.reducer'
 import * as FlexFuelReducer from './flexfuel.reducer'
+import * as SetupReducer from './setup.reducer'
 
 export interface State {
     bluetoothDevices: BluetoothReducer.State,
-    flexFuelDevices: FlexFuelReducer.State
+    flexFuelDevices: FlexFuelReducer.State,
+    setup: SetupReducer.State
 }
 
 const reducers = {
     bluetoothDevices: BluetoothReducer.reducer,
-    flexFuelDevices: FlexFuelReducer.reducer
+    flexFuelDevices: FlexFuelReducer.reducer,
+    setup: SetupReducer.reducer
 }
 
 const developmentReducer: ActionReducer<State> = compose(storeFreeze, combineReducers)(reducers)
@@ -41,3 +44,6 @@ export const getFlexFuelDevices = createSelector(getFlexFuelDevicesState, FlexFu
 export const getFlexFuelDevicesConnected = createSelector(getFlexFuelDevicesState, FlexFuelReducer.getConnected)
 export const getFlexFuelDevicesConnecting = createSelector(getFlexFuelDevicesState, FlexFuelReducer.getConnecting)
 export const getFlexFuelDevice = createSelector(getFlexFuelDevicesState, FlexFuelReducer.getDevice)
+
+export const getSetupState = (state: State) => state.setup
+export const getSetupStateView = createSelector(getSetupState, SetupReducer.getView)

@@ -33,7 +33,7 @@
     "zone.js": "0.6.26"
   },
   "devDependencies": {
-    "@ionic/app-scripts": "0.0.45",
+    "@ionic/app-scripts": "https://github.com/driftyco/ionic-app-scripts",
     "@types/hammerjs": "^2.0.33",
     "typescript": "2.0.6"
   },

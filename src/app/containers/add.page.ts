@@ -5,6 +5,7 @@ import { Observable } from 'rxjs/rx'
 
 import * as fromRoot from '../reducers'
 import * as FlexFuelActions from '../actions/flexfuel.actions'
+import * as SetupActions from '../actions/setup.actions'
 import { FlexFuelDevice } from '../models/devices'
 
 @Component({
@@ -17,28 +18,34 @@ export class AddPageComponent {
   flexFuelDevice: Observable<FlexFuelDevice>
   connected: Observable<boolean>
   connecting: Observable<boolean>
+  view: Observable<string>
 
   constructor(
     private nav: NavController,
     private navParams: NavParams,
     private store: Store<fromRoot.State>) {
-      this.device = Object.assign({}, navParams.get('device'), {
-        image: null,
-        nickname: null,
-        vehicle: null,
-        version: null
-      })
+    this.device = Object.assign({}, navParams.get('device'), {
+      image: null,
+      nickname: null,
+      vehicle: null,
+      version: null
+    })
 
-      this.flexFuelDevice = store.select(fromRoot.getFlexFuelDevice)
-      this.connected = store.select(fromRoot.getFlexFuelDevicesConnected)
-      this.connecting = store.select(fromRoot.getFlexFuelDevicesConnecting)
+    this.flexFuelDevice = store.select(fromRoot.getFlexFuelDevice)
+    this.view = store.select(fromRoot.getSetupStateView)
+    this.connected = store.select(fromRoot.getFlexFuelDevicesConnected)
+    this.store.dispatch(new SetupActions.SetupStartAction())
   }
 
   connect() {
+    this.store.dispatch(new SetupActions.SetupConnectAction())
     this.store.dispatch(new FlexFuelActions.ConnectFlexFuelDeviceAction(this.device))
-  }
 
-  setup() {
-    this.store.dispatch(new FlexFuelActions.SetupFlexFuelDeviceAction(this.device))
+    this.connected.subscribe(connected => {
+      console.log('connected', connected)
+      if (connected) {
+        this.store.dispatch(new FlexFuelActions.SetupFlexFuelDeviceAction(this.device))
+      }
+    })
   }
 }

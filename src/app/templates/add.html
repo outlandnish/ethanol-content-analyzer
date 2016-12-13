@@ -1,0 +1,55 @@
+<ion-content>
+    <div style="width:100%;height:40%;background-color:#626262;padding:25px">
+        <div style="width:75%;height:80%;border-radius:15px;border:4px solid #000000;background-color:#424242;margin-left:auto;margin-right:auto;">
+            <img src="assets/dt.png" width="55px" height="55px" style="position:relative:right:12px;bottom:12px" />
+        </div>
+    </div>
+    <ion-grid>
+        <ion-row>
+            <ion-col width-90 *ngIf="(view | async) == '[Setup] Start'">
+                <div style="padding-left:6px;padding-right:6px">
+                    <h3 style="font-family:'Roboto Medium';font-size:24px">Setup your flex fuel kit</h3>
+                    <p style="font-family:'Roboto';font-size:16px">Start your car and make the sure the green light is blinking on the D box</p>
+                    <p style="font-family:'Roboto';font-size:16px">When that's ready, tap Connect.</p>
+                </div>
+            </ion-col>
+            <ion-col width-90 *ngIf="(view | async) == '[Setup] Connect'">
+                <div style="padding-left:6px;padding-right:6px">
+                    <h3 style="font-family:'Roboto Medium';font-size:24px">Connecting...</h3>
+                </div>
+            </ion-col>
+            <ion-col width-90 *ngIf="(view | async) == '[Setup] Connect Success'">
+                <div style="padding-left:6px;padding-right:6px">
+                    <h3 style="font-family:'Roboto Medium';font-size:24px">Connected!</h3>
+                    <p style="font-family:'Roboto';font-size:16px">Getting details from your car</p>
+                </div>
+            </ion-col>
+            <ion-col width-90 *ngIf="(view | async) == '[Setup] Connect Fail'">
+                <div style="padding-left:6px;padding-right:6px">
+                    <h3 style="font-family:'Roboto Medium';font-size:24px">Unable to connect</h3>
+                    <p style="font-family:'Roboto';font-size:16px">Try restarting this process</p>
+                </div>
+            </ion-col>
+            <ion-col width-90 *ngIf="(view | async) == '[Setup] Details Success'">
+                <div style="padding-left:6px;padding-right:6px">
+                    <h3 style="font-family:'Roboto Medium';font-size:24px">Here's what we found</h3>
+                    <p style="font-family:'Roboto';font-size:16px">Something goes here</p>
+                </div>
+            </ion-col>
+            <ion-col width-90 *ngIf="(view | async) == '[Setup] Details Fail'">
+                <div style="padding-left:6px;padding-right:6px">
+                    <h3 style="font-family:'Roboto Medium';font-size:24px">Couldn't get data from your kit</h3>
+                    <p style="font-family:'Roboto';font-size:16px">Try this again</p>
+                </div>
+            </ion-col>
+        </ion-row>
+        <ion-row center *ngIf="(view | async) == '[Setup] Start'">
+            <ion-col width-10>
+                <div style="padding-left:6px;padding-right:6px;margin-left:auto;margin-right:auto;">
+                    <button ion-button color="dark" (click)='connect()'>Connect</button>
+                </div>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+
+</ion-content>
