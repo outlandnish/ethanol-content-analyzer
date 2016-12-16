@@ -33,7 +33,14 @@
             <ion-col width-90 *ngIf="(view | async) == '[Setup] Details Success'">
                 <div style="padding-left:6px;padding-right:6px">
                     <h3 style="font-family:'Roboto Medium';font-size:24px">Here's what we found</h3>
-                    <p style="font-family:'Roboto';font-size:16px">Something goes here</p>
+                    <h4>Make</h4>
+                    <p>{{ device.make }}</p>
+                    <h4>Model</h4>
+                    <p>{{ device.model }}</p>
+                    <h4>Version</h4>
+                    <p>{{ device.version }}</p>
+                    <h4>Mark</h4>
+                    <p>{{ device.mark }}</p>
                 </div>
             </ion-col>
             <ion-col width-90 *ngIf="(view | async) == '[Setup] Details Fail'">
@@ -47,6 +54,13 @@
             <ion-col width-10>
                 <div style="padding-left:6px;padding-right:6px;margin-left:auto;margin-right:auto;">
                     <button ion-button color="dark" (click)='connect()'>Connect</button>
+                </div>
+            </ion-col>
+        </ion-row>
+        <ion-row center *ngIf="(view | async) == '[Setup] Details Success'">
+            <ion-col width-10>
+                <div style="padding-left:6px;padding-right:6px;margin-left:auto;margin-right:auto;">
+                    <button ion-button color="dark" (click)='done()'>Done</button>
                 </div>
             </ion-col>
         </ion-row>

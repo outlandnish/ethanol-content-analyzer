@@ -30,4 +30,6 @@
   </feature>
   <allow-navigation href="http://192.168.86.172:8000"/>
   <allow-navigation href="http://192.168.43.163:8000"/>
+  <allow-navigation href="http://172.16.0.1:8000"/>
+  <allow-navigation href="http://192.168.86.177:8000"/>
 </widget>

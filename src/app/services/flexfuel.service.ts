@@ -3,9 +3,9 @@ import { Platform } from 'ionic-angular'
 import { Observable, Subscription } from 'rxjs/rx'
 
 import { BluetoothSerial } from 'ionic-native'
-import { Storage } from '@ionic/storage'
 
 import { FlexFuelDevice } from '../models/devices'
+import { FlexFuelData } from '../models/flexfuel-data'
 
 @Injectable()
 export class FlexFuelService {
@@ -18,8 +18,7 @@ export class FlexFuelService {
     device: FlexFuelDevice
 
     constructor(
-        private platform: Platform,
-        private storage: Storage,
+        private platform: Platform
     ) { }
 
     async init() {
@@ -29,7 +28,8 @@ export class FlexFuelService {
     }
 
     async getFlexFuelDevices() {
-        return await this.storage.get('devices')
+        //return await this.storage.get('devices')
+        return []
     }
 
     async listPairedDevices() {
@@ -55,16 +55,21 @@ export class FlexFuelService {
         this.device = device
         if (!this.ready)
             await this.init()
+
         let connection = BluetoothSerial.connect(device.address)
-        await connection
-            .flatMap(c => this.setConnection(c))
-            .toPromise()
+        await this.subscribe(connection)
     }
 
-    setConnection(connection) {
-        console.log('connected to flex fuel device')
-        this.connection = connection
-        return connection
+    subscribe(connection) {
+        return new Promise((resolve, reject) => {
+            connection.subscribe(success => {
+                console.log('service connect success', success)
+                resolve(success)
+            }, error => {
+                console.error('service connect error', error)
+                reject(error)
+            })
+        })
     }
 
     async disconnect() {
@@ -79,25 +84,46 @@ export class FlexFuelService {
     }
 
     async getFlexFuelInfo() {
-        let vehicle = null, version = null
+        console.log('getting flex fuel info')
         if (!this.ready)
             await this.init()
+        console.log('initialized')
 
+        console.log('toggling read')
         await this.toggleRead()
-        var data = await BluetoothSerial.readUntil('\r\r')
-        { vehicle, version } this.parseFlexFuelData(data)
 
+        console.log('getting data')
+        let result = await this.getInfo() as FlexFuelData
+        console.log('result', result)
+
+        console.log('toggling read again')
         await this.toggleRead()
 
         return Object.assign({}, this.device, {
-            vehicle, 
-            version
+            make: result.make,
+            model: result.model,
+            version: result.version,
+            mark: result.mark
         })
     }
 
     async toggleRead() {
         await BluetoothSerial.write("---+++---S\n")
         this.reading = !this.reading
+    }
+
+    async getInfo() {
+        return new Promise((resolve, reject) => {
+            BluetoothSerial.subscribe('\r\r')
+                .subscribe(data => {
+                    let parsed: FlexFuelData = this.parseFlexFuelData(data)
+                    if (parsed.make)
+                        resolve(parsed)
+                }, error => {
+                    console.error('get info error', error)
+                    reject(error)
+                })
+        })
     }
 
     async stream() {
@@ -116,15 +142,15 @@ export class FlexFuelService {
             // subscribe to Bluetooth stream
             this.streamer = BluetoothSerial.subscribe('\r\r')
                 .subscribe(
-                data => {
-                    let parsed = this.parseFlexFuelData(data)
-                    observer.next(parsed)
-                },
-                error => {
-                    // emit streaming error
-                    console.error('data stream error', error)
-                }
-            )
+                    data => {
+                        let parsed = this.parseFlexFuelData(data)
+                        observer.next(parsed)
+                    },
+                    error => {
+                        // emit streaming error
+                        console.error('data stream error', error)
+                    }
+                )
         })
     }
 
@@ -144,33 +170,78 @@ export class FlexFuelService {
     }
 
     parseFlexFuelData(data) {
-        let ethanol = null, fuelPressure = null, vehicle = null, version = null
-        if (data.indexOf("OUTPUT OFF") >= 0) {
-            return { ethanol, fuelPressure, vehicle, version, output: false }
-        }
-        else {
-            let split = data.replace(' ', '').split('\t')
-
+        let ethanol = null, fuelPressure = null, make = null, model = null, version = null, mark = null
+        try {
+            let split = data.replace(':', '=').replace(';', '').split('\t')
             for (let part of split) {
-                var field = part.split('=')
-                if (field.indexOf('ETHANOL') >= 0)
+                var field = part.replace(/\s/g, '').split('=')
+                if (field[0].indexOf('ETHANOL') >= 0)
                     ethanol = parseFloat(field[1]) / 5.0
-                else if (field.indexOf('FuelT(C)') >= 0) {
+                else if (field[0].indexOf('FuelT(C)') >= 0) {
                     fuelPressure = parseFloat(field[1]) / 5.0
                     fuelPressure = fuelPressure <= 1.5 ? 0 : fuelPressure
                 }
-                else if (field.indexOf('ID') >= 0)
-                    { vehicle, version } this.parseFlexFuelDeviceInfo(field[1])
+                else if (field[0].indexOf('ID') >= 0) {
+                    let result = this.parseFlexFuelDeviceInfo(field[1])
+                    make = result.make
+                    model = result.model
+                    version = result.version
+                    mark = result.mark
+                }
             }
-            return { ethanol, fuelPressure, vehicle, version, output: true }
+        }
+        catch (err) {
+            console.log('error parsing data', data, err)
+        }
+        finally {
+            return { ethanol, fuelPressure, make, model, version, mark, output: true }
         }
     }
 
     parseFlexFuelDeviceInfo(id) {
-        var split = id.split(' - ')
-        let vehicle = split[0]
-        let version = split[1].replace('Mk', 'Mark ')
+        if (id) {
+            var split = id.split('-')
+            let make = this.getMake(split[0])
+            let model = this.getModel(split[1])
+            let version = split[2]
+            let mark = split[3].replace('Mk', 'Mark ')
 
-        return { vehicle, version }
+            return { make, model, version, mark }
+        }
+        else
+            return null
+    }
+
+    getMake(make) {
+        switch (make) {
+            case 'SUB':
+                return 'Subaru'
+            case 'MIT':
+                return 'Mitsubishi'
+            case 'MAZ':
+                return 'Mazda'
+            default:
+                return make
+        }
+    }
+
+    getModel(model) {
+        switch (model) {
+            case 'BRZ':
+                return 'BRZ'
+            case 'WRX':
+                return 'WRX'
+            case 'STI':
+            case 'WRX/STI':
+                return 'WRX STI'
+            case 'FXT':
+                return 'Forester'
+            case 'EVOX':
+                return 'Evolution X'
+            case 'MX5':
+                return 'Miata'
+            default:
+                return model
+        }
     }
 }

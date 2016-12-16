@@ -1,7 +1,9 @@
 export interface FlexFuelData {
     ethanol?: number
     fuelPressure?: number
-    vehicle: string
+    make: string
+    model: string
     version: string
+    mark: string
     output: boolean
 }

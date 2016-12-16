@@ -6,7 +6,6 @@ import { EffectsModule } from '@ngrx/effects'
 import { MaterialModule } from '@angular/material'
 
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular'
-import { Storage } from '@ionic/storage'
 import 'hammerjs'
 
 import { AppComponent } from './app.component'
@@ -45,7 +44,6 @@ import { reducer } from './reducers'
   ],
   providers: [
     { provide: ErrorHandler, useClass: IonicErrorHandler },
-    Storage,
     FlexFuelService
   ]
 })
