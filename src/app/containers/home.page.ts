@@ -27,20 +27,20 @@ export class HomePageComponent {
         private store: Store<fromRoot.State>) {
         this.bluetoothDevices = store.select(fromRoot.getBluetoothDevices)
         this.flexFuelDevices = store.select(fromRoot.getFlexFuelDevices)
-        this.connecting = store.select(fromRoot.getFlexFuelDevicesConnecting)
-        this.connected = store.select(fromRoot.getFlexFuelDevicesConnected)
-    }
-
-    connect(device: FlexFuelDevice) {
-        this.store.dispatch(new FlexFuelActions.ConnectFlexFuelDeviceAction(device))
-    }
-
-    remove(device: FlexFuelDevice) {
-        this.store.dispatch(new FlexFuelActions.DeleteFlexFuelDeviceAction(device))
+        this.connecting = store.select(fromRoot.getFlexFuelDeviceConnecting)
+        this.connected = store.select(fromRoot.getFlexFuelDeviceConnected)
     }
 
     setup(device: BluetoothDevice) {
         // maybe add this to an state object too?
         this.nav.push(AddPageComponent, { device })
+    }
+
+    connect(device: FlexFuelDevice) {
+        this.nav.push(ViewPageComponent, { device })
+    }
+
+    remove(device: FlexFuelDevice) {
+        this.store.dispatch(new FlexFuelActions.DeleteFlexFuelDeviceAction(device))
     }
 }

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core'
 import { Platform } from 'ionic-angular'
-import { Observable, Subscription } from 'rxjs/rx'
+import { Subscription } from 'rxjs/rx'
 
 import { BluetoothSerial } from 'ionic-native'
 
@@ -61,13 +61,20 @@ export class FlexFuelService {
     }
 
     async disconnect() {
-        if (this.connection) {
-            if (this.reading)
-                await this.toggleRead()
+        console.log('disconnecting from device')
+        try {
+            if (this.connection) {
+                if (this.reading)
+                    await this.toggleRead()
 
-            this.connection.unsubscribe()
-            this.connecting = false
-            this.connected = false
+                this.connection.unsubscribe()
+                this.connecting = false
+                this.connected = false
+                return true
+            }
+        }
+        catch(err) {
+            throw err
         }
     }
 
@@ -112,6 +119,7 @@ export class FlexFuelService {
     }
 
     async stream() {
+        console.log('requested start streaming')
         if (!this.connected)
             throw new Error()   // emit error because it's not connected
 
@@ -123,19 +131,18 @@ export class FlexFuelService {
         if (!this.reading)
             await this.toggleRead()
 
-        return Observable.create(observer => {
-            // subscribe to Bluetooth stream
+        return new Promise((resolve, reject) => {
+            console.log('susbcribing to bluetooth stream')
             this.streamer = BluetoothSerial.subscribe('\r\r')
                 .subscribe(
                 data => {
-                    let parsed = this.parseFlexFuelData(data)
-                    observer.next(parsed)
-                },
-                error => {
-                    // emit streaming error
+                    console.log('got data')
+                    let parsed: FlexFuelData = this.parseFlexFuelData(data)
+                    resolve(parsed)
+                }, error => {
                     console.error('data stream error', error)
-                }
-                )
+                    reject(error)
+                })
         })
     }
 

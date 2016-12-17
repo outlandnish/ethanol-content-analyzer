@@ -10,23 +10,26 @@ import { createSelector } from 'reselect';
 import * as BluetoothReducer from './bluetooth.reducer'
 import * as FlexFuelReducer from './flexfuel.reducer'
 import * as SetupReducer from './setup.reducer'
+import * as ViewReducer from './view.reducer'
 
 export interface State {
     bluetoothDevices: BluetoothReducer.State,
     flexFuelDevices: FlexFuelReducer.State,
-    setup: SetupReducer.State
+    setup: SetupReducer.State,
+    view: ViewReducer.State
 }
 
 const reducers = {
     bluetoothDevices: BluetoothReducer.reducer,
     flexFuelDevices: FlexFuelReducer.reducer,
-    setup: SetupReducer.reducer
+    setup: SetupReducer.reducer,
+    view: ViewReducer.reducer
 }
 
 const developmentReducer: ActionReducer<State> = compose(localStorageSync(
-    ['bluetoothDevices', 'flexFuelDevices', 'setup'], true), storeFreeze, combineReducers)(reducers)
+    ['bluetoothDevices', 'flexFuelDevices', 'setup', 'view'], true), storeFreeze, combineReducers)(reducers)
 const productionReducer: ActionReducer<State> = compose(localStorageSync(
-    ['bluetoothDevices', 'flexFuelDevices', 'setup'], true), combineReducers)(reducers)
+    ['bluetoothDevices', 'flexFuelDevices', 'setup', 'view'], true), combineReducers)(reducers)
 
 export function reducer(state: any, action: any) {
     if (isDevMode())
@@ -42,8 +45,10 @@ export const getBluetoothDevices = createSelector(getBluetoothDevicesState, Blue
 
 export const getFlexFuelDevicesState = (state: State) => state.flexFuelDevices
 export const getFlexFuelDevices = createSelector(getFlexFuelDevicesState, FlexFuelReducer.getDevices)
-export const getFlexFuelDevicesConnected = createSelector(getFlexFuelDevicesState, FlexFuelReducer.getConnected)
-export const getFlexFuelDevicesConnecting = createSelector(getFlexFuelDevicesState, FlexFuelReducer.getConnecting)
+export const getFlexFuelDeviceConnected = createSelector(getFlexFuelDevicesState, FlexFuelReducer.getConnected)
+export const getFlexFuelDeviceConnecting = createSelector(getFlexFuelDevicesState, FlexFuelReducer.getConnecting)
+export const getFlexFuelDeviceStreaming = createSelector(getFlexFuelDevicesState, FlexFuelReducer.getStreaming)
+export const getFlexFuelDeviceData = createSelector(getFlexFuelDevicesState, FlexFuelReducer.getData)
 export const getFlexFuelDevice = createSelector(getFlexFuelDevicesState, FlexFuelReducer.getDevice)
 
 export const getSetupState = (state: State) => state.setup

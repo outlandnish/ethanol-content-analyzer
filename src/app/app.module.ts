@@ -1,7 +1,7 @@
 import { NgModule, ErrorHandler } from '@angular/core'
 import { CommonModule } from '@angular/common'
 
-import { StoreModule, combineReducers } from '@ngrx/store'
+import { StoreModule } from '@ngrx/store'
 import { EffectsModule } from '@ngrx/effects'
 import { MaterialModule } from '@angular/material'
 
@@ -12,8 +12,6 @@ import { Storage } from '@ionic/storage'
 export function provideStorage() {
   return new Storage(['sqlite', 'websql', 'indexeddb'], { name: '__mydb' });
 }
-
-import { compose } from '@ngrx/core/compose'
 
 import { AppComponent } from './app.component'
 import { HomePageComponent } from './containers/home.page'

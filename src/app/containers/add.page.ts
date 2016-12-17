@@ -33,7 +33,7 @@ export class AddPageComponent {
 
     this.flexFuelDevice = store.select(fromRoot.getFlexFuelDevice)
     this.view = store.select(fromRoot.getSetupStateView)
-    this.connected = store.select(fromRoot.getFlexFuelDevicesConnected)
+    this.connected = store.select(fromRoot.getFlexFuelDeviceConnected)
     this.store.dispatch(new SetupActions.SetupStartAction())
   }
 
@@ -50,6 +50,13 @@ export class AddPageComponent {
   }
 
   done() {
+    this.store.dispatch(new FlexFuelActions.DisconnectFlexFuelDeviceAction())
     this.nav.pop()
+  }
+
+  // disconnect when we leave the page
+  ionViewWillLeave() {
+    if (this.connected.last())
+      this.store.dispatch(new FlexFuelActions.DisconnectFlexFuelDeviceAction())
   }
 }
