@@ -3,6 +3,7 @@ import { isDevMode } from '@angular/core'
 import { ActionReducer, combineReducers } from '@ngrx/store'
 import { compose } from '@ngrx/core/compose'
 import { storeFreeze } from 'ngrx-store-freeze'
+import { localStorageSync } from 'ngrx-store-localstorage'
 
 import { createSelector } from 'reselect';
 
@@ -22,8 +23,10 @@ const reducers = {
     setup: SetupReducer.reducer
 }
 
-const developmentReducer: ActionReducer<State> = compose(storeFreeze, combineReducers)(reducers)
-const productionReducer: ActionReducer<State> = combineReducers(reducers)
+const developmentReducer: ActionReducer<State> = compose(localStorageSync(
+    ['bluetoothDevices', 'flexFuelDevices', 'setup']), storeFreeze, combineReducers)(reducers)
+const productionReducer: ActionReducer<State> = compose(localStorageSync(
+    ['bluetoothDevices', 'flexFuelDevices', 'setup']), combineReducers)(reducers)
 
 export function reducer(state: any, action: any) {
     if (isDevMode())
@@ -38,8 +41,6 @@ export const getBluetoothDevicesLoading = createSelector(getBluetoothDevicesStat
 export const getBluetoothDevices = createSelector(getBluetoothDevicesState, BluetoothReducer.getDevices)
 
 export const getFlexFuelDevicesState = (state: State) => state.flexFuelDevices
-export const getFlexFuelDevicesLoaded = createSelector(getFlexFuelDevicesState, FlexFuelReducer.getLoaded)
-export const getFlexFuelDevicesLoading = createSelector(getFlexFuelDevicesState, FlexFuelReducer.getLoading)
 export const getFlexFuelDevices = createSelector(getFlexFuelDevicesState, FlexFuelReducer.getDevices)
 export const getFlexFuelDevicesConnected = createSelector(getFlexFuelDevicesState, FlexFuelReducer.getConnected)
 export const getFlexFuelDevicesConnecting = createSelector(getFlexFuelDevicesState, FlexFuelReducer.getConnecting)

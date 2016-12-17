@@ -2,8 +2,6 @@ import { FlexFuelDevice } from '../models/devices'
 import * as flexfuel from '../actions/flexfuel.actions'
 
 export interface State {
-    loaded: boolean,
-    loading: boolean,
     devices: FlexFuelDevice[]
     connected: boolean,
     connecting: boolean,
@@ -11,8 +9,6 @@ export interface State {
 }
 
 const initialState: State = {
-    loaded: false,
-    loading: false,
     devices: [],
     connected: false,
     connecting: false,
@@ -24,7 +20,15 @@ export function reducer(state = initialState, action: flexfuel.Actions): State {
         case flexfuel.ActionTypes.ADD_FLEXFUEL:
             const newDevice = action.payload
              return Object.assign({}, state, {
-                 devices: [ ...state.devices, newDevice ]
+                 devices: [ ...state.devices, newDevice ],
+                 // this has the potential to be problematic
+                 device: newDevice
+             })
+        case flexfuel.ActionTypes.DELETE_FLEXFUEL:
+            const removeDevice = action.payload
+            Object.assign({}, state, {
+                 devices: state.devices.filter(d => d.id !== removeDevice.id),
+                 device: state.device.id === removeDevice.id ? null : state.device
              })
         case flexfuel.ActionTypes.CONNECT_FLEXFUEL:
             const connectDevice = action.payload
@@ -47,8 +51,6 @@ export function reducer(state = initialState, action: flexfuel.Actions): State {
     }
 }
 
-export const getLoaded = (state: State) => state.loaded
-export const getLoading = (state: State) => state.loading
 export const getDevices = (state: State) => state.devices
 
 export const getConnected = (state: State) => state.connected

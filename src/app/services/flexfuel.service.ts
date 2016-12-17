@@ -27,11 +27,6 @@ export class FlexFuelService {
         this.reading = false
     }
 
-    async getFlexFuelDevices() {
-        //return await this.storage.get('devices')
-        return []
-    }
-
     async listPairedDevices() {
         if (!this.ready)
             await this.init()
@@ -40,33 +35,26 @@ export class FlexFuelService {
         return devices.filter(d => d.name.indexOf('DT-') == 0)
     }
 
-    async addDevice(device: FlexFuelDevice) {
-        //this.devices.push(device)
-        //await this.storage.set('devices', this.devices)
-    }
-
-    async removeDevice(device: FlexFuelDevice) {
-        //this.devices = this.devices.filter(d => d.id != device.id)
-        //await this.storage.set('devices', this.devices)
-    }
-
     async connect(device: FlexFuelDevice) {
-        this.connecting = true
-        this.device = device
-        if (!this.ready)
-            await this.init()
+        if (!this.connected) {
+            this.connecting = true
+            this.device = device
+            if (!this.ready)
+                await this.init()
 
-        let connection = BluetoothSerial.connect(device.address)
-        await this.subscribe(connection)
+            let connection = BluetoothSerial.connect(device.address)
+            await this.subscribe(connection)
+        }
     }
 
     subscribe(connection) {
         return new Promise((resolve, reject) => {
             connection.subscribe(success => {
-                console.log('service connect success', success)
+                this.connecting = false
+                this.connected = true
                 resolve(success)
             }, error => {
-                console.error('service connect error', error)
+                this.connecting = false
                 reject(error)
             })
         })
@@ -84,19 +72,16 @@ export class FlexFuelService {
     }
 
     async getFlexFuelInfo() {
-        console.log('getting flex fuel info')
         if (!this.ready)
             await this.init()
-        console.log('initialized')
 
-        console.log('toggling read')
+        // request flex fuel kit to start sending data
         await this.toggleRead()
 
-        console.log('getting data')
+        // grab the details about the flex fuel kit
         let result = await this.getInfo() as FlexFuelData
-        console.log('result', result)
 
-        console.log('toggling read again')
+        // request flex fuel kit to stop sending data
         await this.toggleRead()
 
         return Object.assign({}, this.device, {
@@ -142,14 +127,14 @@ export class FlexFuelService {
             // subscribe to Bluetooth stream
             this.streamer = BluetoothSerial.subscribe('\r\r')
                 .subscribe(
-                    data => {
-                        let parsed = this.parseFlexFuelData(data)
-                        observer.next(parsed)
-                    },
-                    error => {
-                        // emit streaming error
-                        console.error('data stream error', error)
-                    }
+                data => {
+                    let parsed = this.parseFlexFuelData(data)
+                    observer.next(parsed)
+                },
+                error => {
+                    // emit streaming error
+                    console.error('data stream error', error)
+                }
                 )
         })
     }

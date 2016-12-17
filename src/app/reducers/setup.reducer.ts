@@ -6,7 +6,7 @@ export interface State {
 }
 
 const initialState: State = {
-    view: setup.ActionTypes.SETUP_START,
+    view: setup.ActionTypes.SETUP_START
 }
 
 export function reducer(state = initialState, action: setup.Actions): State {

@@ -16,29 +16,39 @@ export class FlexFuelEffects {
     ) { }
 
     @Effect()
-    flexFuelDevices: Observable<Action> = this.actions$
-        .ofType(FlexFuelActions.ActionTypes.LOAD_FLEXFUEL)
-        .startWith(new FlexFuelActions.LoadFlexFuelDevicesAction)
-        .switchMap(() =>
-            Observable.fromPromise(this.service.listPairedDevices())
-                .map((devices: FlexFuelDevice[]) => new FlexFuelActions.LoadFlexFuelDevicesSuccessAction(devices))
-                .catch(error => Observable.of(new FlexFuelActions.LoadFlexFuelDevicesFailAction(error)))
-        )
-
-    @Effect()
     connectFlexFuel: Observable<Action> = this.actions$
         .ofType(FlexFuelActions.ActionTypes.CONNECT_FLEXFUEL)
         .map((action: FlexFuelActions.ConnectFlexFuelDeviceAction) => action.payload)
-        .switchMap((device) => 
+        .switchMap((device) =>
             Observable.fromPromise(this.service.connect(device))
-            .map(() => new FlexFuelActions.ConnectFlexFuelDeviceSuccessAction())
-            .catch(error => Observable.of(new FlexFuelActions.ConnectFlexFuelDeviceFailAction(error)))
+                .map(() => new FlexFuelActions.ConnectFlexFuelDeviceSuccessAction())
+                .catch(error => Observable.of(new FlexFuelActions.ConnectFlexFuelDeviceFailAction(error)))
         )
 
     @Effect()
     setupFlexFuel: Observable<Action> = this.actions$
         .ofType(FlexFuelActions.ActionTypes.SETUP_FLEXFUEL)
         .map((action: FlexFuelActions.SetupFlexFuelDeviceAction) => action.payload)
+        .switchMap((device) =>
+            Observable.fromPromise(this.service.getFlexFuelInfo())
+                .map((device: FlexFuelDevice) => new FlexFuelActions.AddFlexFuelDeviceAction(device))
+                .catch(error => Observable.of(new FlexFuelActions.DataFlexFuelErrorAction(error)))
+        )
+
+    @Effect()
+    addFlexFuel: Observable<Action> = this.actions$
+        .ofType(FlexFuelActions.ActionTypes.ADD_FLEXFUEL)
+        .map((action: FlexFuelActions.AddFlexFuelDeviceAction) => action.payload)
+        .switchMap((device) =>
+            Observable.fromPromise(this.service.getFlexFuelInfo())
+                .map((device: FlexFuelDevice) => new FlexFuelActions.AddFlexFuelDeviceAction(device))
+                .catch(error => Observable.of(new FlexFuelActions.DataFlexFuelErrorAction(error)))
+        )
+    
+    @Effect()
+    removeFlexFuel: Observable<Action> = this.actions$
+        .ofType(FlexFuelActions.ActionTypes.DELETE_FLEXFUEL)
+        .map((action: FlexFuelActions.DeleteFlexFuelDeviceAction) => action.payload)
         .switchMap((device) =>
             Observable.fromPromise(this.service.getFlexFuelInfo())
                 .map((device: FlexFuelDevice) => new FlexFuelActions.AddFlexFuelDeviceAction(device))

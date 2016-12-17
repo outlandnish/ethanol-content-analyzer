@@ -1,5 +1,6 @@
 import { BluetoothDevice } from '../models/devices'
 import * as bluetooth from '../actions/bluetooth.actions'
+import * as flexfuel from '../actions/flexfuel.actions'
 
 export interface State {
     loaded: boolean,
@@ -21,14 +22,12 @@ export function reducer(state = initialState, action: bluetooth.Actions): State 
             })
         case bluetooth.ActionTypes.LOAD_PAIRED_BLUETOOTH_DEVICES_SUCCESS:
             const devices = action.payload
-
             return {
                 loaded: true,
                 loading: false,
                 devices: devices
             }
         case bluetooth.ActionTypes.LOAD_PAIRED_BLUETOOTH_DEVICES_FAIL:
-            console.error('failed to load paired bluetooth devices')
             return Object.assign({}, state, {
                 loading: false,
                 loaded: false
@@ -38,6 +37,24 @@ export function reducer(state = initialState, action: bluetooth.Actions): State 
 
             return Object.assign({}, state, {
                 devices: state.devices.filter(d => d.id !== device.id)
+            })
+        case flexfuel.ActionTypes.ADD_FLEXFUEL:
+            const addDevice = action.payload
+
+            return Object.assign({}, state, {
+                devices: state.devices.filter(d => d.id !== addDevice.id)
+            })
+        case flexfuel.ActionTypes.DELETE_FLEXFUEL:
+            const removeDevice = action.payload
+            const btRemoveDevice = {
+                id: removeDevice.id,
+                class: removeDevice.class,
+                address: removeDevice.address,
+                name: removeDevice.name
+            }
+
+            return Object.assign({}, state, {
+                devices: [...state.devices, btRemoveDevice]
             })
         default:
             return state

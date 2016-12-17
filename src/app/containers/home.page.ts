@@ -29,7 +29,6 @@ export class HomePageComponent {
         this.flexFuelDevices = store.select(fromRoot.getFlexFuelDevices)
         this.connecting = store.select(fromRoot.getFlexFuelDevicesConnecting)
         this.connected = store.select(fromRoot.getFlexFuelDevicesConnected)
-
     }
 
     connect(device: FlexFuelDevice) {
