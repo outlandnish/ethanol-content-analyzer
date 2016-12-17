@@ -24,9 +24,9 @@ const reducers = {
 }
 
 const developmentReducer: ActionReducer<State> = compose(localStorageSync(
-    ['bluetoothDevices', 'flexFuelDevices', 'setup']), storeFreeze, combineReducers)(reducers)
+    ['bluetoothDevices', 'flexFuelDevices', 'setup'], true), storeFreeze, combineReducers)(reducers)
 const productionReducer: ActionReducer<State> = compose(localStorageSync(
-    ['bluetoothDevices', 'flexFuelDevices', 'setup']), combineReducers)(reducers)
+    ['bluetoothDevices', 'flexFuelDevices', 'setup'], true), combineReducers)(reducers)
 
 export function reducer(state: any, action: any) {
     if (isDevMode())

@@ -40,11 +40,7 @@ export class HomePageComponent {
     }
 
     setup(device: BluetoothDevice) {
-        //this.nav.push(AddPage, {  device: device })
+        // maybe add this to an state object too?
         this.nav.push(AddPageComponent, { device })
-    }
-
-    ignore(device: BluetoothDevice) {
-        this.store.dispatch(new BluetoothDeviceActions.HideBluetoothDeviceAction(device))
     }
 }
