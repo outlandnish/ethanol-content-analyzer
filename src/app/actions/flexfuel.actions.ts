@@ -84,12 +84,6 @@ export class DisconnectFlexFuelDeviceAction implements Action {
     constructor() { }
 }
 
-export class DisconnectFlexFuelDeviceCompletedAction implements Action {
-    type = ActionTypes.DISCONNECT_FLEXFUEL_COMPLETE
-
-    constructor(public payload: boolean) { }
-}
-
 export class DataFlexFuelErrorAction implements Action {
     type = ActionTypes.DATA_FLEXFUEL_ERROR
 
@@ -126,7 +120,6 @@ export type Actions
      | ConnectFlexFuelDeviceSuccessAction
      | ConnectFlexFuelDeviceFailAction
      | DisconnectFlexFuelDeviceAction
-     | DisconnectFlexFuelDeviceCompletedAction
      | DataFlexFuelStreamStartAction
      | DataFlexFuelStreamEndAction
      | DataFlexFuelUpdateAction

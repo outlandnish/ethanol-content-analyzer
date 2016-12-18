@@ -3,6 +3,7 @@ import { Action } from '@ngrx/store'
 import { Effect, Actions } from '@ngrx/effects'
 
 import { Observable } from 'rxjs/Rx'
+import { defer } from 'rxjs/observable/defer'
 
 import { FlexFuelDevice } from '../models/devices'
 import { FlexFuelData } from '../models/flexfuel-data'
@@ -26,15 +27,10 @@ export class FlexFuelEffects {
                 .catch(error => Observable.of(new FlexFuelActions.ConnectFlexFuelDeviceFailAction(error)))
         )
     
-    @Effect()
-    disconnectFlexFuel: Observable<Action> = this.actions$
-        .ofType(FlexFuelActions.ActionTypes.DISCONNECT_FLEXFUEL)
-        .map((action: FlexFuelActions.DisconnectFlexFuelDeviceAction) => action.payload)
-        .switchMap(() =>
-            Observable.fromPromise(this.service.disconnect())
-                .map((success: boolean) => new FlexFuelActions.DisconnectFlexFuelDeviceCompletedAction(success))
-                .catch(error => Observable.of(new FlexFuelActions.ConnectFlexFuelDeviceFailAction(error)))
-        )
+    @Effect({ dispatch: false })
+    disconnectFlexFuel: Observable<Action> = defer(() => {
+        this.service.disconnect()
+    })
 
     @Effect()
     setupFlexFuel: Observable<Action> = this.actions$
