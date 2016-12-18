@@ -5,11 +5,11 @@
     </div>
     <ion-grid>
         <ion-row>
-            <ion-col width-50 *ngIf="(data.ethanol) | async">
-                <h2>{{ data.ethanol }}</h2>
+            <ion-col width-50 *ngIf="(data.ethanol | async)">
+                <h2>{{ (data.ethanol | async) }}</h2>
             </ion-col>
-            <ion-col width-50 *ngIf="(data.fuelPressure) | async">
-                <h2>{{ data.fuelPressure }}</h2>
+            <ion-col width-50 *ngIf="(data.fuelPressure | async)">
+                <h2>{{ (data.fuelPressure | async) }}</h2>
             </ion-col>
         </ion-row>
     </ion-grid>
@@ -18,9 +18,9 @@
 
 <ion-footer>
   <ion-toolbar>    
-    <ion-title *ngIf="(connecting) | async">Connecting</ion-title>
-    <ion-title *ngIf="(connected) | async">Connected</ion-title>
-    <ion-title *ngIf="(!connected && !connecting) | async">Disconnected</ion-title>
-    <ion-title *ngIf="(error) | async">Connection Error</ion-title>
+    <ion-title *ngIf="(connecting | async)">Connecting</ion-title>
+    <ion-title *ngIf="(connected | async)">Connected</ion-title>
+    <ion-title *ngIf="(!(connected | async) && (!connecting) | async))">Disconnected</ion-title>
+    <ion-title *ngIf="(error | async)">Connection Error</ion-title>
   </ion-toolbar>
 </ion-footer>
