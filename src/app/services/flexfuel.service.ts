@@ -119,7 +119,6 @@ export class FlexFuelService {
     }
 
     async stream() {
-        console.log('requested start streaming')
         if (!this.connected)
             throw new Error()   // emit error because it's not connected
 
@@ -132,12 +131,11 @@ export class FlexFuelService {
             await this.toggleRead()
 
         return new Promise((resolve, reject) => {
-            console.log('susbcribing to bluetooth stream')
             this.streamer = BluetoothSerial.subscribe('\r\r')
                 .subscribe(
                 data => {
-                    console.log('got data')
                     let parsed: FlexFuelData = this.parseFlexFuelData(data)
+                    console.log(parsed)
                     resolve(parsed)
                 }, error => {
                     console.error('data stream error', error)

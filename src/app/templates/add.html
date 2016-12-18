@@ -34,13 +34,13 @@
                 <div style="padding-left:6px;padding-right:6px">
                     <h3 style="font-family:'Roboto Medium';font-size:24px">Here's what we found</h3>
                     <h4>Make</h4>
-                    <p>{{ flexFuelDevice.make }}</p>
+                    <p>{{ (flexFuelDevice.make) | async }}</p>
                     <h4>Model</h4>
-                    <p>{{ flexFuelDevice.model }}</p>
+                    <p>{{ (flexFuelDevice.model) | async }}</p>
                     <h4>Version</h4>
-                    <p>{{ flexFuelDevice.version }}</p>
+                    <p>{{ (flexFuelDevice.version) | async }}</p>
                     <h4>Mark</h4>
-                    <p>{{ flexFuelDevice.mark }}</p>
+                    <p>{{ (flexFuelDevice.mark) | async }}</p>
                 </div>
             </ion-col>
             <ion-col width-90 *ngIf="(view | async) == '[Setup] Details Fail'">

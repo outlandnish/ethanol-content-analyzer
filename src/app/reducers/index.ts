@@ -52,4 +52,8 @@ export const getFlexFuelDeviceData = createSelector(getFlexFuelDevicesState, Fle
 export const getFlexFuelDevice = createSelector(getFlexFuelDevicesState, FlexFuelReducer.getDevice)
 
 export const getSetupState = (state: State) => state.setup
-export const getSetupStateView = createSelector(getSetupState, SetupReducer.getView)
+export const getSetupView = createSelector(getSetupState, SetupReducer.getView)
+export const getSetupActive = createSelector(getSetupState, SetupReducer.getActive)
+
+export const getViewState = (state: State) => state.view
+export const getViewActive = createSelector(getViewState, ViewReducer.getActive)

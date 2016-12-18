@@ -1,6 +1,8 @@
 import { Action } from '@ngrx/store'
 
 export const ActionTypes = {
+    SETUP_ACTIVATE:         '[Setup] Activate',
+    SETUP_DEACTIVATE:       '[Setup] Deactive',
     SETUP_START:            '[Setup] Start',
     SETUP_CONNECT:          '[Setup] Connect',
     SETUP_CONNECT_SUCCESS:  '[Setup] Connect Success',
@@ -49,8 +51,24 @@ export class SetupDetailsFailAction implements Action {
     constructor(public payload: any) { }
 }
 
+export class SetupActivateAction implements Action {
+    type = ActionTypes.SETUP_ACTIVATE
+    payload = null
+
+    constructor() { }
+}
+
+export class SetupDeactivateAction implements Action {
+    type = ActionTypes.SETUP_DEACTIVATE
+    payload = null
+
+    constructor() { }
+}
+
 export type Actions
      = SetupStartAction
+     | SetupActivateAction
+     | SetupDeactivateAction
      | SetupConnectSuccessAction
      | SetupConnectFailAction
      | SetupDetailsSuccessAction

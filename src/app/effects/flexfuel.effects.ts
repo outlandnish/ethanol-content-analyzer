@@ -26,6 +26,7 @@ export class FlexFuelEffects {
                 .catch(error => Observable.of(new FlexFuelActions.ConnectFlexFuelDeviceFailAction(error)))
         )
     
+    @Effect()
     disconnectFlexFuel: Observable<Action> = this.actions$
         .ofType(FlexFuelActions.ActionTypes.DISCONNECT_FLEXFUEL)
         .map((action: FlexFuelActions.DisconnectFlexFuelDeviceAction) => action.payload)
@@ -46,6 +47,7 @@ export class FlexFuelEffects {
                 .catch(error => Observable.of(new FlexFuelActions.DataFlexFuelErrorAction(error)))
         )
 
+    @Effect()
     streamFlexFuel: Observable<Action> = this.actions$
         .ofType(FlexFuelActions.ActionTypes.DATA_FLEXFUEL_STREAM_START)
         .map((action: FlexFuelActions.DataFlexFuelStreamStartAction) => action.payload)
@@ -55,6 +57,7 @@ export class FlexFuelEffects {
                 .catch(error => Observable.of(new FlexFuelActions.DataFlexFuelErrorAction(error)))
         )
 
+    @Effect()
     stopStreamFlexFuel: Observable<Action> = this.actions$
         .ofType(FlexFuelActions.ActionTypes.DATA_FLEXFUEL_STREAM_END)
         .map((action: FlexFuelActions.DataFlexFuelStreamEndAction) => action.payload)

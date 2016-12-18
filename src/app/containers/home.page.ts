@@ -5,7 +5,6 @@ import { Observable } from 'rxjs/rx'
 
 import * as fromRoot from '../reducers'
 import * as FlexFuelActions from '../actions/flexfuel.actions'
-import * as BluetoothDeviceActions from '../actions/bluetooth.actions'
 import { FlexFuelDevice, BluetoothDevice } from '../models/devices'
 
 import { AddPageComponent } from './add.page'

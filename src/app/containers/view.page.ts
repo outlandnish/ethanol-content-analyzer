@@ -7,6 +7,7 @@ import { FlexFuelDevice } from '../models/devices'
 import { FlexFuelData } from '../models/flexfuel-data'
 import * as fromRoot from '../reducers'
 import * as FlexFuelActions from '../actions/flexfuel.actions'
+import * as ViewActions from '../actions/view.actions'
 
 @Component({
   selector: 'page-view',
@@ -21,33 +22,48 @@ export class ViewPageComponent {
   streaming: Observable<boolean>
   data: Observable<FlexFuelData>
   error: Observable<boolean>
+  active: Observable<boolean>
+  _active: boolean
+  _connected: boolean
 
   constructor(
     private nav: NavController,
     private navParams: NavParams,
     private store: Store<fromRoot.State>) {
-    this.connected = store.select(fromRoot.getFlexFuelDeviceConnected)
-    this.connecting = store.select(fromRoot.getFlexFuelDeviceConnecting)
-    this.streaming = store.select(fromRoot.getFlexFuelDeviceStreaming)
-    this.flexFuelDevice = store.select(fromRoot.getFlexFuelDevice)
-    this.data = store.select(fromRoot.getFlexFuelDeviceData)
 
-    this.device = navParams.get('device') as FlexFuelDevice
+      // setup some state observables
+      this.connected = store.select(fromRoot.getFlexFuelDeviceConnected)
+      this.connecting = store.select(fromRoot.getFlexFuelDeviceConnecting)
+      this.streaming = store.select(fromRoot.getFlexFuelDeviceStreaming)
+      this.flexFuelDevice = store.select(fromRoot.getFlexFuelDevice)
+      this.data = store.select(fromRoot.getFlexFuelDeviceData)
+      this.active = store.select(fromRoot.getViewActive)
+      this.device = navParams.get('device') as FlexFuelDevice
 
-    this.connected.subscribe(connected => {
-      console.log('connected', connected)
-      if (connected) {
-        this.store.dispatch(new FlexFuelActions.DataFlexFuelStreamStartAction())
-      }
-      else {
-        this.store.dispatch(new FlexFuelActions.ConnectFlexFuelDeviceAction(this.device))
-      }
+      // a couple events to keep track of (not sure if this is the ngrx/Redux way to do so)
+      this.connected.subscribe(connected => {
+        this._connected = connected
+        if (this._active && this._connected) {
+          this.store.dispatch(new FlexFuelActions.DataFlexFuelStreamStartAction())
+        }
+        else if (this._active && !this._connected)
+          this.store.dispatch(new FlexFuelActions.ConnectFlexFuelDeviceAction(this.device))
     })
+
+    this.active.subscribe(active => {
+      this._active = active
+    })
+  }
+
+  ionViewDidEnter() {
+    this.store.dispatch(new ViewActions.ViewActivateAction())
   }
 
   // disconnect when we leave the page
   ionViewWillLeave() {
-    if (this.connected.last())
-      this.store.dispatch(new FlexFuelActions.DisconnectFlexFuelDeviceAction())
+    this.store.dispatch(new ViewActions.ViewDeactivateAction())
+    if (this._connected) {
+      this.store.dispatch(new FlexFuelActions.DataFlexFuelStreamEndAction)
+    }
   }
 }
