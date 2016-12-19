@@ -1,24 +1,6 @@
 <ion-content padding>
-  <setup-card></setup-card>
-  <md-card *ngFor="let device of flexFuelDevices | async">
-    <md-card-title-group>
-      <img md-card-lg-image src="{{ device.image }}">
-      <md-card-title>{{ device.make }} {{ device.model }}</md-card-title>
-      <md-card-subtitle>{{ device.mark }} ({{ device.name }})</md-card-subtitle>
-    </md-card-title-group>
-    <md-card-actions>
-      <button md-button (click)="connect(device)">Connect</button>
-      <button md-button (click)="remove(device)">Remove</button>
-    </md-card-actions>
-  </md-card>
-  <md-card *ngFor="let device of bluetoothDevices | async">
-    <md-card-title-group>
-      <img md-card-sm-image src="assets/dt.png">
-      <md-card-title>{{ device.name }}</md-card-title>
-      <md-card-subtitle>Setup required</md-card-subtitle>
-    </md-card-title-group>
-    <md-card-actions>
-      <button md-button (click)="setup(device)">Setup</button>
-    </md-card-actions>
-  </md-card>
+  <flexfuel-card *ngFor="let device of flexFuelDevices | async" [device]="device">
+  </flexfuel-card>
+  <setup-card *ngFor="let device of bluetoothDevices | async" [device]="device">
+  </setup-card>
 </ion-content>
