@@ -3,12 +3,16 @@ import { NgModule } from '@angular/core'
 import { MaterialModule } from '@angular/material'
 import { CommonModule } from '@angular/common'
 
-import { SetupCardComponent } from './setup-card.component'
-import { FlexFuelCardComponent } from './flexfuel-card.component'
+import { SetupCard } from './setup-card'
+import { SetupList } from './setup-list'
+import { FlexFuelCard } from './flexfuel-card'
+import { FlexFuelList } from './flexfuel-list'
 
 export const COMPONENTS = [
-    SetupCardComponent,
-    FlexFuelCardComponent
+    SetupCard,
+    SetupList,
+    FlexFuelCard,
+    FlexFuelList
 ]
 
 @NgModule({

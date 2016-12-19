@@ -23,7 +23,7 @@ import { ViewPageComponent } from '../containers/view.page'
     </md-card>
     `
 })
-export class FlexFuelCardComponent {
+export class FlexFuelCard {
     @Input()
     device: FlexFuelDevice
 

@@ -11,6 +11,36 @@ import * as ViewActions from '../actions/view.actions'
 
 @Component({
   selector: 'page-view',
+  styles: [ `
+    .image-container {
+        width: 100%;
+        height: 40%;
+        background-color: #626262;
+        padding: 16px;
+    }
+
+    .content-container {
+        width: 100%;
+        padding: 16px;
+    }
+
+    ion-footer {
+
+    }
+
+    h1 {
+      font-size: 24px;
+      font-family: 'Roboto';
+      margin: 16px 0px;
+      color: #E51A1F;
+    }
+
+    p {
+      font-size: 14px;
+      font-family: 'Roboto';
+      margin-bottom: 16px;
+    }
+  `],
   templateUrl: '../templates/view.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })

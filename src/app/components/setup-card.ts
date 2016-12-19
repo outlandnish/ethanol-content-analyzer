@@ -18,7 +18,7 @@ import { AddPageComponent } from '../containers/add.page'
     </md-card>
     `
 })
-export class SetupCardComponent {
+export class SetupCard {
     @Input()
     device: BluetoothDevice
 

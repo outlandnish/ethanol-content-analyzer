@@ -1,6 +1,4 @@
 <ion-content padding>
-  <flexfuel-card *ngFor="let device of flexFuelDevices | async" [device]="device">
-  </flexfuel-card>
-  <setup-card *ngFor="let device of bluetoothDevices | async" [device]="device">
-  </setup-card>
+  <flexfuel-list [devices]="flexFuelDevices | async"></flexfuel-list>
+  <setup-list [devices]="bluetoothDevices | async"></setup-list>
 </ion-content>
