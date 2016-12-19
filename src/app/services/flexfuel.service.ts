@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core'
 import { Platform } from 'ionic-angular'
-import { Subscription } from 'rxjs/rx'
+import { Subscription } from 'rxjs/Subscription'
 
 import { BluetoothSerial } from 'ionic-native'
 

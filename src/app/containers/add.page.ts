@@ -1,7 +1,7 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core'
 import { NavController, NavParams } from 'ionic-angular'
 import { Store } from '@ngrx/store'
-import { Observable } from 'rxjs/rx'
+import { Observable } from 'rxjs/Observable'
 
 import * as fromRoot from '../reducers'
 import * as FlexFuelActions from '../actions/flexfuel.actions'
