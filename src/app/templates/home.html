@@ -1,12 +1,5 @@
-<ion-header>
-  <ion-navbar>
-    <ion-title>
-      Ethanol Content Analyzer
-    </ion-title>
-  </ion-navbar>
-</ion-header>
-
 <ion-content padding>
+  <setup-card></setup-card>
   <md-card *ngFor="let device of flexFuelDevices | async">
     <md-card-title-group>
       <img md-card-lg-image src="{{ device.image }}">

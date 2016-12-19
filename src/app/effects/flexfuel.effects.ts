@@ -4,7 +4,6 @@ import { Effect, Actions } from '@ngrx/effects'
 
 import { Observable } from 'rxjs/observable'
 import { defer } from 'rxjs/observable/defer'
-import { of } from 'rxjs/add/operator/of'
 import 'rxjs/add/operator/mergeMap'
 import 'rxjs/add/operator/switchMap'
 import 'rxjs/add/operator/catch'

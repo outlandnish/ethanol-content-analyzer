@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common'
 import { StoreModule } from '@ngrx/store'
 import { EffectsModule } from '@ngrx/effects'
 import { MaterialModule } from '@angular/material'
+import { ComponentsModule } from './components'
 
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular'
 import 'hammerjs'
@@ -36,6 +37,7 @@ import { reducer } from './reducers'
     IonicModule.forRoot(AppComponent),
     CommonModule,
     MaterialModule.forRoot(),
+    ComponentsModule,
     StoreModule.provideStore(reducer),
     EffectsModule.run(BluetoothEffects),
     EffectsModule.run(FlexFuelEffects)
