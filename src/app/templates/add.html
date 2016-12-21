@@ -31,6 +31,11 @@
 </ion-content>
 <ion-footer>
     <ion-toolbar>
+        <ion-buttons start>
+            <button right *ngIf="(view | async) == '[Setup] Connect'" (click)="cancel()">CANCEL</button>
+            <button right *ngIf="(view | async) == '[Setup] Connect Success'" (click)="cancel()">CANCEL</button>
+            <button right *ngIf="(view | async) == '[Setup] Connect Fail'" (click)="cancel()">CANCEL</button>
+        </ion-buttons>
         <ion-buttons end>
             <button right *ngIf="(view | async) == '[Setup] Start'" (click)="connect()">CONNECT</button>
             <button right *ngIf="(view | async) == '[Setup] Connect Fail'" (click)="connect()">RETRY</button>

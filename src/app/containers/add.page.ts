@@ -106,6 +106,10 @@ export class AddPageComponent {
     this.nav.pop()
   }
 
+  cancel() {
+    this.nav.pop()
+  }
+
   ionViewDidEnter() {
     this.store.dispatch(new SetupActions.SetupActivateAction())
   }
