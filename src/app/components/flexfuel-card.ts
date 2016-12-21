@@ -12,9 +12,9 @@ import { ViewPageComponent } from '../containers/view.page'
     template: `
     <md-card *ngIf="(device)">
         <md-card-title-group>
-            <img md-card-lg-image src="{{ device.image }}">
-            <md-card-title>{{ device.make }} {{ device.model }}</md-card-title>
-            <md-card-subtitle>{{ device.mark }} ({{ device.name }})</md-card-subtitle>
+            <img md-card-lg-image src="{{ device.vehicle.image }}">
+            <md-card-title>{{ device.vehicle.make }} {{ device.vehicle.model }}</md-card-title>
+            <md-card-subtitle>{{ device.vehicle.mark }} ({{ device.vehicle.name }})</md-card-subtitle>
         </md-card-title-group>
         <md-card-actions>
             <button md-button (click)="connect(device)">Connect</button>
