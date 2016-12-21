@@ -5,11 +5,11 @@
     <div class="content-container">
         <ion-grid>
             <ion-row>
-                <ion-col *ngIf="_data.ethanol">
-                    <sensor-view input="_data.ethanol" measurement="percent" max="85" color="#FFC107"></sensor-view>
+                <ion-col *ngIf="_state.data.ethanol">
+                    <sensor-view input="_state.data.ethanol" measurement="percent" max="85" color="#FFC107"></sensor-view>
                 </ion-col>
-                <ion-col *ngIf="_data.fuelPressure">
-                    <sensor-view input="_data.fuelPressure" measurement="psi" max="100" color="#4CAF50"></sensor-view>
+                <ion-col *ngIf="_state.data.fuelPressure">
+                    <sensor-view input="_state.data.fuelPressure" measurement="psi" max="100" color="#4CAF50"></sensor-view>
                 </ion-col>
             </ion-row>
         </ion-grid>
@@ -17,9 +17,9 @@
 </ion-content>
 <ion-footer>
     <ion-toolbar>
-        <span *ngIf="(connected | async)'">Connected</span>
-        <span *ngIf="(connecting | async)'">Connecting</span>
-        <span *ngIf="(streaming | async)">Streaming</span>
+        <span *ngIf="_state.connected'">Connected</span>
+        <span *ngIf="_state.connecting'">Connecting</span>
+        <span *ngIf="_state.streaming">Streaming</span>
         <!-- TODO: need a state for error -->
     </ion-toolbar>
 </ion-footer>
