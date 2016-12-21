@@ -24,10 +24,6 @@ import * as ViewActions from '../actions/view.actions'
         padding: 16px;
     }
 
-    ion-footer {
-
-    }
-
     h1 {
       font-size: 24px;
       font-family: 'Roboto';

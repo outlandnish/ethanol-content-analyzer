@@ -54,7 +54,7 @@ import { FlexFuelDevice } from '../models/devices'
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AddPageComponent {
-  device: FlexFuelDevice
+  _device: FlexFuelDevice
   flexFuelDevice: Observable<FlexFuelDevice>
   connected: Observable<boolean>
   connecting: Observable<boolean>
@@ -67,7 +67,7 @@ export class AddPageComponent {
     private nav: NavController,
     private navParams: NavParams,
     private store: Store<fromRoot.State>) {
-    this.device = Object.assign({}, navParams.get('device'), {
+    this._device = Object.assign({}, navParams.get('device'), {
       image: null,
       nickname: null,
       vehicle: null,
@@ -83,17 +83,21 @@ export class AddPageComponent {
 
   connect() {
     this.store.dispatch(new SetupActions.SetupConnectAction())
-    this.store.dispatch(new FlexFuelActions.ConnectFlexFuelDeviceAction(this.device))
+    this.store.dispatch(new FlexFuelActions.ConnectFlexFuelDeviceAction(this._device))
 
     this.connected.subscribe(connected => {
       this._connected = connected
       if (this._connected && this._active) {
-        this.store.dispatch(new FlexFuelActions.SetupFlexFuelDeviceAction(this.device))
+        this.store.dispatch(new FlexFuelActions.SetupFlexFuelDeviceAction(this._device))
       }
     })
 
     this.active.subscribe(active => {
       this._active = active
+    })
+
+    this.flexFuelDevice.subscribe(device => {
+      this._device = device
     })
   }
 

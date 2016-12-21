@@ -10,15 +10,19 @@
             ­­<p>When you're ready, tap Connect.</p>
         </div>
         <div *ngIf="(view | async) == '[Setup] Connect'">
-            <h1>Grabbing info...</h1>
-            <p>We're pulling up some details from your flex fuel kit.</p>
-            <p>Hold tight and it'll be ready soon.</p>
+            <h1>Connecting...</h1>
+            <p>Trying to communicate with your flex fuel kit.</p>
         </div>
         <div *ngIf="(view | async) == '[Setup] Connect Success'">
-            <h1>{{ (device | async).make (device | async).model }}</h1>
-            <p>Looks like you've got the {{ (device | async).mark }} kit'</p>
+            <h1>Grabbing info...</h1>
+            <p>Pulling up some details from your flex fuel kit.</p>
+            <p>Hold tight and it'll be ready soon.</p>
         </div>
-        <div *ngIf="(view | async) == '[Setup] Connect Fail'">
+        <div *ngIf="(view | async) == '[Setup] Details Success'">
+            <h1>{{ _device.make }} {{ _device.model }}</h1>
+            <p>Looks like you've got the {{ _device.mark }} kit!</p>
+        </div>
+        <div *ngIf="(view | async) == '[Setup] Connect Fail' || (view | async) == '[Setup] Details Fail'">
             <h1>Connection Error</h1>
             <p>There's a problem communicating with your flex fuel kit.</p>
             <p>Turn off your car and wait for 30 seconds. Turn it back on and tap Retry.</p>
@@ -27,8 +31,10 @@
 </ion-content>
 <ion-footer>
     <ion-toolbar>
-        <button *ngIf="(view | async) == '[Setup] Start'" (click)="connect()">CONNECT</button>
-        <button *ngIf="(view | async) == '[Setup] Connect Fail'" (click)="connect()">RETRY</button>
-        <button *ngIf="(view | async) == '[Setup] Connect Success'" (click)="done()">DONE</button>
+        <ion-buttons end>
+            <button right *ngIf="(view | async) == '[Setup] Start'" (click)="connect()">CONNECT</button>
+            <button right *ngIf="(view | async) == '[Setup] Connect Fail'" (click)="connect()">RETRY</button>
+            <button right *ngIf="(view | async) == '[Setup] Details Success'" (click)="done()">DONE</button>
+        </ion-buttons>
     </ion-toolbar>
 </ion-footer>
