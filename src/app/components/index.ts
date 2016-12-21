@@ -7,12 +7,14 @@ import { SetupCard } from './setup-card'
 import { SetupList } from './setup-list'
 import { FlexFuelCard } from './flexfuel-card'
 import { FlexFuelList } from './flexfuel-list'
+import { SensorView } from './sensor-view'
 
 export const COMPONENTS = [
     SetupCard,
     SetupList,
     FlexFuelCard,
-    FlexFuelList
+    FlexFuelList,
+    SensorView
 ]
 
 @NgModule({

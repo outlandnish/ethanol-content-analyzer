@@ -65,6 +65,7 @@ export class ViewPageComponent {
   active: Observable<boolean>
   _active: boolean
   _connected: boolean
+  _data: FlexFuelData
 
   constructor(
     private nav: NavController,
@@ -92,6 +93,10 @@ export class ViewPageComponent {
 
     this.active.subscribe(active => {
       this._active = active
+    })
+
+    this.data.subscribe(data => {
+      this._data = data
     })
   }
 
