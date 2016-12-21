@@ -6,6 +6,14 @@ export interface BluetoothDevice {
 }
 
 export interface FlexFuelDevice extends BluetoothDevice {
-    vehicle: string
+    vehicle: Vehicle
+}
+
+export interface Vehicle {
+    id: string
+    make: string
+    model: string
     version: string
+    mark: string
+    image?: string
 }

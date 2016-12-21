@@ -13,15 +13,29 @@ import * as ViewActions from '../actions/view.actions'
   selector: 'page-view',
   styles: [ `
     .image-container {
-        width: 100%;
-        height: 40%;
-        background-color: #626262;
-        padding: 16px;
+      width: 100%;
+      height: 40%;
+      background-color: #626262;
+      padding: 16px;
+      margin: 0px;
     }
 
     .content-container {
-        width: 100%;
-        padding: 16px;
+      width: 100%;
+      padding: 16px;
+      margin: 0px;
+    }
+
+    ion-toolbar {
+      border-top: 1px solid #E51A1F;
+    }
+
+    button {
+      background-color: transparent;
+      font-family: 'Roboto Medium';
+      font-weight: '700';
+      font-size: 16px;
+      color: #E51A1F;
     }
 
     h1 {
@@ -32,7 +46,7 @@ import * as ViewActions from '../actions/view.actions'
     }
 
     p {
-      font-size: 14px;
+      font-size: 16px;
       font-family: 'Roboto';
       margin-bottom: 16px;
     }

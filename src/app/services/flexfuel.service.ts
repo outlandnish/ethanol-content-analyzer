@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs/Subscription'
 
 import { BluetoothSerial } from 'ionic-native'
 
-import { FlexFuelDevice } from '../models/devices'
+import { FlexFuelDevice, Vehicle } from '../models/devices'
 import { FlexFuelData } from '../models/flexfuel-data'
 
 @Injectable()
@@ -91,12 +91,7 @@ export class FlexFuelService {
         // request flex fuel kit to stop sending data
         await this.toggleRead()
 
-        return Object.assign({}, this.device, {
-            make: result.make,
-            model: result.model,
-            version: result.version,
-            mark: result.mark
-        })
+        return Object.assign({}, this.device, { vehicle: result.vehicle })
     }
 
     async toggleRead() {
@@ -109,7 +104,7 @@ export class FlexFuelService {
             BluetoothSerial.subscribe('\r\r')
                 .subscribe(data => {
                     let parsed: FlexFuelData = this.parseFlexFuelData(data)
-                    if (parsed.make)
+                    if (parsed.vehicle)
                         resolve(parsed)
                 }, error => {
                     console.error('get info error', error)
@@ -135,7 +130,6 @@ export class FlexFuelService {
                 .subscribe(
                 data => {
                     let parsed: FlexFuelData = this.parseFlexFuelData(data)
-                    console.log(parsed)
                     resolve(parsed)
                 }, error => {
                     console.error('data stream error', error)
@@ -160,7 +154,7 @@ export class FlexFuelService {
     }
 
     parseFlexFuelData(data) {
-        let ethanol = null, fuelPressure = null, make = null, model = null, version = null, mark = null
+        let ethanol = null, fuelPressure = null, vehicle = null
         try {
             let split = data.replace(':', '=').replace(';', '').split('\t')
             for (let part of split) {
@@ -172,11 +166,7 @@ export class FlexFuelService {
                     fuelPressure = fuelPressure <= 1.5 ? 0 : fuelPressure
                 }
                 else if (field[0].indexOf('ID') >= 0) {
-                    let result = this.parseFlexFuelDeviceInfo(field[1])
-                    make = result.make
-                    model = result.model
-                    version = result.version
-                    mark = result.mark
+                    vehicle = this.parseFlexFuelDeviceInfo(field[1])
                 }
             }
         }
@@ -184,19 +174,20 @@ export class FlexFuelService {
             console.log('error parsing data', data, err)
         }
         finally {
-            return { ethanol, fuelPressure, make, model, version, mark, output: true }
+            return { ethanol, fuelPressure, vehicle, output: true }
         }
     }
 
-    parseFlexFuelDeviceInfo(id) {
+    parseFlexFuelDeviceInfo(id): Vehicle {
         if (id) {
             var split = id.split('-')
             let make = this.getMake(split[0])
             let model = this.getModel(split[1])
             let version = split[2]
             let mark = split[3].replace('Mk', 'Mark ')
+            let image = this.getImage(id)
 
-            return { make, model, version, mark }
+            return { id, make, model, version, mark, image }
         }
         else
             return null
@@ -232,6 +223,13 @@ export class FlexFuelService {
                 return 'Miata'
             default:
                 return model
+        }
+    }
+
+    getImage(id) {
+        switch (id) {
+            default:
+                return 'asserts/dt.png'
         }
     }
 }
