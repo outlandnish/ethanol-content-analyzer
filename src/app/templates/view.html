@@ -3,14 +3,16 @@
         <!--<img [src]="image" class="image">-->
     </div>
     <div class="content-container">
-        <ion-row>
-            <ion-col *ngIf="_data.ethanol">
-                <sensor-view input="_data.ethanol" measurement="percent" max="85" color="#FFC107"  />
-            </ion-col>
-            <ion-col *ngIf="_data.fuelPressure">
-                <sensor-view *ngIf="_data.fuelPressure" input="_data.fuelPressure" measurement="psi" max="100" color="#4CAF50"  />
-            </ion-col>
-        </ion-row>
+        <ion-grid>
+            <ion-row>
+                <ion-col *ngIf="_data.ethanol">
+                    <sensor-view input="_data.ethanol" measurement="percent" max="85" color="#FFC107"  />
+                </ion-col>
+                <ion-col *ngIf="_data.fuelPressure">
+                    <sensor-view *ngIf="_data.fuelPressure" input="_data.fuelPressure" measurement="psi" max="100" color="#4CAF50"  />
+                </ion-col>
+            </ion-row>
+        </ion-grid>
     </div>
 </ion-content>
 <ion-footer>

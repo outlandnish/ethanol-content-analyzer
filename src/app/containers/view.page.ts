@@ -26,6 +26,10 @@ import * as ViewActions from '../actions/view.actions'
       margin: 0px;
     }
 
+    ion-grid {
+      margin-top: 16px;
+    }
+
     ion-toolbar {
       border-top: 1px solid #E51A1F;
     }

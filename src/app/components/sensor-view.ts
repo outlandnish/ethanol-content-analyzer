@@ -16,10 +16,10 @@ import { AddPageComponent } from '../containers/add.page'
         <span class="sensor-value">{{ _min }}</span>
         <span class="sensor-label">min</span>
     </div>
-    `
+    `,
     styles: [`
     .sensor-view {
-        
+
     }
 
     .sensor-label {
