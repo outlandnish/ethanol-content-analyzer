@@ -6,10 +6,10 @@
         <ion-grid>
             <ion-row>
                 <ion-col *ngIf="_data.ethanol">
-                    <sensor-view input="_data.ethanol" measurement="percent" max="85" color="#FFC107"  />
+                    <sensor-view input="_data.ethanol" measurement="percent" max="85" color="#FFC107"></sensor-view>
                 </ion-col>
                 <ion-col *ngIf="_data.fuelPressure">
-                    <sensor-view *ngIf="_data.fuelPressure" input="_data.fuelPressure" measurement="psi" max="100" color="#4CAF50"  />
+                    <sensor-view input="_data.fuelPressure" measurement="psi" max="100" color="#4CAF50"></sensor-view>
                 </ion-col>
             </ion-row>
         </ion-grid>

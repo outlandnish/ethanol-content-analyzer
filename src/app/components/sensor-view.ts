@@ -4,7 +4,7 @@ import { BluetoothDevice } from '../models/devices'
 import { AddPageComponent } from '../containers/add.page'
 
 @Component({
-    selector: 'setup-card',
+    selector: 'sensor-view',
     template: `
     <div class='sensor-view'>
         <!-- graph goes here -->
