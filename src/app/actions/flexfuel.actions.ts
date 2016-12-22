@@ -91,7 +91,7 @@ export class DataFlexFuelErrorAction implements Action {
 }
 
 export class DataFlexFuelUpdateAction implements Action {
-    type = ActionTypes.DATA_FLEXFUEL_ERROR
+    type = ActionTypes.DATA_FLEXFUEL_UPDATE
 
     constructor(public payload: FlexFuelData) { }
 }

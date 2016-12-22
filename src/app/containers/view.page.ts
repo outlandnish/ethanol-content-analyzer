@@ -63,11 +63,16 @@ export class ViewPageComponent {
   device: FlexFuelDevice
   flexFuelState: Observable<State>
   connected: Observable<boolean>
-  data: Observable<FlexFuelData>
+  ethanol: Observable<number>
+  fuelPressure: Observable<number>
+  hasEthanol: Observable<boolean>
+  hasFuelPressure: Observable<boolean>
   error: Observable<boolean>
   active: Observable<boolean>
   _active: boolean
   _state: State
+  _hasEthanol: boolean = false
+  _hasFuelPressure: boolean = false
 
   constructor(
     private nav: NavController,
@@ -76,7 +81,11 @@ export class ViewPageComponent {
 
     // setup some state observables
     this.flexFuelState = store.select(fromRoot.getFlexFuelDevicesState)
-    this.data = store.select(fromRoot.getFlexFuelDeviceData)
+    this.connected = store.select(fromRoot.getFlexFuelDeviceConnected)
+    this.ethanol = store.select(fromRoot.getFlexFuelEthanol)
+    this.fuelPressure = store.select(fromRoot.getFlexFuelFuelPressure)
+    this.hasEthanol = store.select(fromRoot.getFlexFuelHasEthanol)
+    this.hasFuelPressure = store.select(fromRoot.getFlexFuelHasFuelPressure)
     this.active = store.select(fromRoot.getViewActive)
     this.device = navParams.get('device') as FlexFuelDevice
 
@@ -86,17 +95,23 @@ export class ViewPageComponent {
 
     this.flexFuelState.subscribe(state => {
       this._state = state
-
-      if (this._active && this._state.connected) {
-        this.store.dispatch(new FlexFuelActions.DataFlexFuelStreamStartAction())
-      }
-      else if (this._active && !this._state.connected)
-        this.store.dispatch(new FlexFuelActions.ConnectFlexFuelDeviceAction(this.device))
     })
   }
 
   ionViewDidEnter() {
     this.store.dispatch(new ViewActions.ViewActivateAction())
+
+    this.connected.subscribe(connected => {
+      console.log('connected changed', connected)
+      console.log('active', this._active)
+      if (this._active && connected) {
+        console.log('request start streaming')
+        this.store.dispatch(new FlexFuelActions.DataFlexFuelStreamStartAction())
+      }
+      else if (this._active && !connected)
+        console.log('request connection')
+        this.store.dispatch(new FlexFuelActions.ConnectFlexFuelDeviceAction(this.device))
+    })
   }
 
   // disconnect when we leave the page

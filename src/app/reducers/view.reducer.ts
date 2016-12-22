@@ -11,10 +11,10 @@ const initialState: State = {
 export function reducer(state = initialState, action: view.Actions): State {
     switch (action.type) {
         case view.ActionTypes.VIEW_ACTIVATE:
-            console.log('activating view data')
+            console.log('activating data view')
             return Object.assign({}, state, { active: true })
         case view.ActionTypes.VIEW_DEACTIVATE:
-            console.log('deactivating view data')
+            console.log('deactivating data view')
             return Object.assign({}, state, { active: false })
         default:
             return state

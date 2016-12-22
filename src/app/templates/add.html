@@ -19,8 +19,8 @@
             <p>Hold tight and it'll be ready soon.</p>
         </div>
         <div *ngIf="(view | async) == '[Setup] Details Success'">
-            <h1>{{ _device.vehicle.make }} {{ _device.vehicle.model }}</h1>
-            <p>Looks like you've got the {{ _device.vehicle.mark }} kit!</p>
+            <h1>{{ _device?.vehicle.make }} {{ _device?.vehicle.model }}</h1>
+            <p>Looks like you've got the {{ _device?.vehicle.mark }} kit!</p>
         </div>
         <div *ngIf="(view | async) == '[Setup] Connect Fail' || (view | async) == '[Setup] Details Fail'">
             <h1>Connection Error</h1>

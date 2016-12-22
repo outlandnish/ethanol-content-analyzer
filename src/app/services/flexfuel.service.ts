@@ -1,11 +1,15 @@
 import { Injectable } from '@angular/core'
 import { Platform } from 'ionic-angular'
 import { Subscription } from 'rxjs/Subscription'
+import { Store } from '@ngrx/store'
+import * as fromRoot from '../reducers'
+import * as FlexFuelActions from '../actions/flexfuel.actions'
 
 import { BluetoothSerial } from 'ionic-native'
 
 import { FlexFuelDevice, Vehicle } from '../models/devices'
 import { FlexFuelData } from '../models/flexfuel-data'
+import * as _ from 'lodash'
 
 @Injectable()
 export class FlexFuelService {
@@ -18,7 +22,8 @@ export class FlexFuelService {
     device: FlexFuelDevice
 
     constructor(
-        private platform: Platform
+        private platform: Platform,
+        private store: Store<fromRoot.State>
     ) { }
 
     async init() {
@@ -32,7 +37,9 @@ export class FlexFuelService {
             await this.init()
 
         let devices = await BluetoothSerial.list()
-        return devices.filter(d => d.name.indexOf('DT-') == 0)
+        devices = devices.filter(d => d.name.indexOf('DT-') == 0)
+        let flexFuelDevices = this.store.select(fromRoot.getFlexFuelDevices).take(1)
+        return _.differenceBy(flexFuelDevices, devices, 'id')
     }
 
     async connect(device: FlexFuelDevice) {
@@ -114,6 +121,7 @@ export class FlexFuelService {
     }
 
     async stream() {
+        console.log('start')
         if (!this.connected)
             throw new Error()   // emit error because it's not connected
 
@@ -130,9 +138,11 @@ export class FlexFuelService {
                 .subscribe(
                 data => {
                     let parsed: FlexFuelData = this.parseFlexFuelData(data)
+                    this.store.dispatch(new FlexFuelActions.DataFlexFuelUpdateAction(parsed))
                     resolve(parsed)
                 }, error => {
                     console.error('data stream error', error)
+                    this.store.dispatch(new FlexFuelActions.DataFlexFuelErrorAction(error))
                     reject(error)
                 })
         })
@@ -154,16 +164,19 @@ export class FlexFuelService {
     }
 
     parseFlexFuelData(data) {
-        let ethanol = null, fuelPressure = null, vehicle = null
+        let ethanol = null, fuelPressure = null, vehicle = null, hasEthanol = false, hasFuelPressure = false
         try {
             let split = data.replace(':', '=').replace(';', '').split('\t')
             for (let part of split) {
                 var field = part.replace(/\s/g, '').split('=')
-                if (field[0].indexOf('ETHANOL') >= 0)
+                if (field[0].indexOf('ETHANOL') >= 0) {
                     ethanol = parseFloat(field[1]) / 5.0
+                    hasEthanol = true
+                }
                 else if (field[0].indexOf('FuelT(C)') >= 0) {
                     fuelPressure = parseFloat(field[1]) / 5.0
                     fuelPressure = fuelPressure <= 1.5 ? 0 : fuelPressure
+                    hasFuelPressure = true
                 }
                 else if (field[0].indexOf('ID') >= 0) {
                     vehicle = this.parseFlexFuelDeviceInfo(field[1])
@@ -174,7 +187,7 @@ export class FlexFuelService {
             console.log('error parsing data', data, err)
         }
         finally {
-            return { ethanol, fuelPressure, vehicle, output: true }
+            return { ethanol, fuelPressure, vehicle, output: true, hasEthanol, hasFuelPressure }
         }
     }
 
@@ -228,8 +241,9 @@ export class FlexFuelService {
 
     getImage(id) {
         switch (id) {
+            // TODO: add in vector images for the different cars
             default:
-                return 'asserts/dt.png'
+                return 'assets/dt.png'
         }
     }
 }

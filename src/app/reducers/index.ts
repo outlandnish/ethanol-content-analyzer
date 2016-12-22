@@ -49,6 +49,11 @@ export const getFlexFuelDeviceConnected = createSelector(getFlexFuelDevicesState
 export const getFlexFuelDeviceConnecting = createSelector(getFlexFuelDevicesState, FlexFuelReducer.getConnecting)
 export const getFlexFuelDeviceStreaming = createSelector(getFlexFuelDevicesState, FlexFuelReducer.getStreaming)
 export const getFlexFuelDeviceData = createSelector(getFlexFuelDevicesState, FlexFuelReducer.getData)
+export const getFlexFuelEthanol = createSelector(getFlexFuelDevicesState, FlexFuelReducer.getEthanol)
+export const getFlexFuelFuelPressure = createSelector(getFlexFuelDevicesState, FlexFuelReducer.getFuelPressure)
+export const getFlexFuelHasEthanol = createSelector(getFlexFuelDevicesState, FlexFuelReducer.getHasEthanol)
+export const getFlexFuelHasFuelPressure = createSelector(getFlexFuelDevicesState, FlexFuelReducer.getHasFuelPressure)
+
 export const getFlexFuelDevice = createSelector(getFlexFuelDevicesState, FlexFuelReducer.getDevice)
 
 export const getSetupState = (state: State) => state.setup

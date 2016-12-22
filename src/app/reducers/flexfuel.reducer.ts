@@ -8,7 +8,8 @@ export interface State {
     connecting: boolean,
     streaming: boolean,
     device: FlexFuelDevice,
-    data: FlexFuelData
+    data: FlexFuelData,
+    error: boolean
 }
 
 const initialState: State = {
@@ -17,7 +18,8 @@ const initialState: State = {
     connecting: false,
     streaming: false,
     device: null,
-    data: null
+    data: null,
+    error: false
 }
 
 export function reducer(state = initialState, action: flexfuel.Actions): State {
@@ -39,39 +41,48 @@ export function reducer(state = initialState, action: flexfuel.Actions): State {
             const connectDevice = action.payload
             return Object.assign({}, state, {
                 device: connectDevice,
-                connecting: true
+                connecting: true,
+                error: false
             })
         case flexfuel.ActionTypes.CONNECT_FLEXFUEL_SUCCESS:
             return Object.assign({}, state, {
                 connecting: false,
-                connected: true
+                connected: true,
+                error: false,
             })
         case flexfuel.ActionTypes.CONNECT_FLEXFUEL_ERROR:
+            console.log('flexfuel connection error')
             return Object.assign({}, state, {
                 connecting: false,
                 connected: false,
-                streaming: false
+                streaming: false,
+                error: true
             })
         case flexfuel.ActionTypes.DISCONNECT_FLEXFUEL:
             return Object.assign({}, state, {
                 connecting: false,
                 connected: false,
                 streaming: false,
+                error: false,
                 device: null
             })
         case flexfuel.ActionTypes.DATA_FLEXFUEL_STREAM_START:
             return Object.assign({}, state, {
-                streaming: true
+                streaming: true,
             })
         case flexfuel.ActionTypes.DATA_FLEXFUEL_STREAM_END:
             return Object.assign({}, state, {
                 streaming: false
             })
         case flexfuel.ActionTypes.DATA_FLEXFUEL_UPDATE:
-            console.log('data update', action.payload)
             const dataUpdate = action.payload as FlexFuelData
             return Object.assign({}, state, {
                 data: dataUpdate
+            })
+        case flexfuel.ActionTypes.DATA_FLEXFUEL_ERROR:
+            console.log('data error')
+            return Object.assign({}, state, {
+                error: true
             })
         default:
             return state
@@ -85,3 +96,7 @@ export const getConnecting = (state: State) => state.connecting
 export const getStreaming = (state: State) => state.streaming
 export const getData = (state: State) => state.data
 export const getDevice = (state: State) => state.device
+export const getEthanol = (state: State) => state.data.ethanol
+export const getFuelPressure = (state: State) => state.data.fuelPressure
+export const getHasEthanol = (state: State) => state.data.hasEthanol
+export const getHasFuelPressure = (state: State) => state.data.hasFuelPressure

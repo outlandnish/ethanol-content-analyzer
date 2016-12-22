@@ -20,6 +20,7 @@ import { AddPageComponent } from './containers/add.page'
 import { ViewPageComponent } from './containers/view.page'
 
 import { FlexFuelService } from './services/flexfuel.service'
+import { FlexFuelMockService } from './services/flexfuel.mock.service'
 import { FlexFuelEffects } from './effects/flexfuel.effects'
 import { BluetoothEffects } from './effects/bluetooth.effects'
 
@@ -52,7 +53,7 @@ import { reducer } from './reducers'
   providers: [
     { provide: Storage, useFactory: provideStorage },
     { provide: ErrorHandler, useClass: IonicErrorHandler },
-    FlexFuelService
+    FlexFuelMockService
   ]
 })
 export class AppModule { }

@@ -11,13 +11,13 @@ import 'rxjs/add/operator/map'
 
 import { BluetoothDevice } from '../models/devices'
 import * as BluetoothActions from '../actions/bluetooth.actions'
-import { FlexFuelService } from '../services/flexfuel.service'
+import { FlexFuelMockService } from '../services/flexfuel.mock.service'
 
 @Injectable()
 export class BluetoothEffects {
     constructor(
         private actions$: Actions,
-        private service: FlexFuelService,
+        private service: FlexFuelMockService,
     ) { }
 
     @Effect()

@@ -10,17 +10,18 @@ import 'rxjs/add/operator/mergeMap'
 import 'rxjs/add/operator/switchMap'
 import 'rxjs/add/operator/catch'
 import 'rxjs/add/operator/map'
+import 'rxjs/add/operator/timeout'
 
 import { FlexFuelDevice } from '../models/devices'
 import { FlexFuelData } from '../models/flexfuel-data'
 import * as FlexFuelActions from '../actions/flexfuel.actions'
-import { FlexFuelService } from '../services/flexfuel.service'
+import { FlexFuelMockService } from '../services/flexfuel.mock.service'
 
 @Injectable()
 export class FlexFuelEffects {
     constructor(
         private actions$: Actions,
-        private service: FlexFuelService,
+        private service: FlexFuelMockService,
     ) { }
 
     @Effect()
@@ -55,6 +56,7 @@ export class FlexFuelEffects {
         .map((action: FlexFuelActions.DataFlexFuelStreamStartAction) => action.payload)
         .switchMap(() =>
             Observable.fromPromise(this.service.stream())
+                .timeout(5000)
                 .map((data: FlexFuelData) => new FlexFuelActions.DataFlexFuelUpdateAction(data))
                 .catch(error => Observable.of(new FlexFuelActions.DataFlexFuelErrorAction(error)))
         )
