@@ -15,13 +15,13 @@ import 'rxjs/add/operator/timeout'
 import { FlexFuelDevice } from '../models/devices'
 import { FlexFuelData } from '../models/flexfuel-data'
 import * as FlexFuelActions from '../actions/flexfuel.actions'
-import { FlexFuelMockService } from '../services/flexfuel.mock.service'
+import { FlexFuelService } from '../services/flexfuel.service'
 
 @Injectable()
 export class FlexFuelEffects {
     constructor(
         private actions$: Actions,
-        private service: FlexFuelMockService,
+        private service: FlexFuelService,
     ) { }
 
     @Effect()
