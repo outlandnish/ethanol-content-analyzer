@@ -59,11 +59,10 @@ export class FlexFuelMockService {
         return new Promise((resolve, reject) => {
             this.streamer = Observable
                 .range(1, 10000)
-                .timeInterval()
                 .flatMap(x => {
                     return Observable
                         .of({ hasEthanol: true, hasFuelPressure: true, ethanol: this.random(5, 85), fuelPressure: this.random(0, 100), vehicle: null })
-                        .delay(this.random(100, 2000))
+                        .delay(this.random(1000, 2000))
                 })
             this.streamer.subscribe(
                 data => {

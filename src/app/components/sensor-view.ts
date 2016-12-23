@@ -1,18 +1,19 @@
-import { Component, Input, OnChanges, SimpleChange } from '@angular/core'
+import { Component, Input, OnChanges, SimpleChange, ChangeDetectionStrategy } from '@angular/core'
 import { NavController } from 'ionic-angular'
 
 @Component({
     selector: 'sensor-view',
     template: `
-    <div class='sensor-view' *ngIf="(_value)">
+    <div class='sensor-view'>
         <!-- graph goes here -->
-        <span class="sensor-label" [style.color]="'color: ' + _rgb">{{ measurement }}</span>
-        <span class="sensor-value">{{ _max }}</span>
-        <span class="sensor-label" [style.color]="'color: ' + _rgb">max</span>
-        <span class="sensor-value">{{ _average }}</span>
-        <span class="sensor-label">average</span>
-        <span class="sensor-value" [style.color]="'color: ' + _rgb">{{ _min }}</span>
-        <span class="sensor-label">min</span>
+        <p class="sensor-value" [ngStyle]="{'color': 'rgb(' + red + ',' + blue + ',' + green + ')'}">{{ value | number: '1.0-2' }}</p>
+        <p class="sensor-label">{{ measurement }}</p>
+        <p class="sensor-value" [ngStyle]="{'color': 'rgb(' + red + ',' + blue + ',' + green + ')'}">{{ valueMax | number: '1.0-2' }}</p>
+        <p class="sensor-label">max</p>
+        <p class="sensor-value" [ngStyle]="{'color': 'rgb(' + red + ',' + blue + ',' + green + ')'}">{{ average | number: '1.0-2' }}</p>
+        <p class="sensor-label">average</p>
+        <p class="sensor-value" [ngStyle]="{'color': 'rgb(' + red + ',' + blue + ',' + green + ')'}">{{ valueMin | number: '1.0-2' }}</p>
+        <p class="sensor-label">min</p>
     </div>
     `,
     styles: [`
@@ -25,15 +26,18 @@ import { NavController } from 'ionic-angular'
         font-family: 'Roboto Medium';
         font-size: 12px;
         font-style: italic;
+        text-align: center;
     }
 
     .sensor-value {
         margin-bottom: 8px;
         font-family: 'Roboto Medium'
         font-size: 16px;
+        text-align: center;
     }
     `
-    ]
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SensorView implements OnChanges {
     @Input()
@@ -43,29 +47,21 @@ export class SensorView implements OnChanges {
     @Input()
     max: number
     @Input()
-    set red(value: number) {
-        this._rgb = `rgb(${value}, ${this.green}, ${this.blue})`
-    }
+    red: number = 0
     @Input()
-    set blue(value: number) {
-        this._rgb = `rgb(${this.red}, ${this.green}, ${value})`
-    }
+    blue: number = 0
     @Input()
-    set green(value: number) {
-        this._rgb = `rgb(${this.red}, ${value}, ${this.blue})`
-    }
+    green: number = 0
 
-    _value: number
-    _average: number = 0
-    _valueCount: number = 0
-    _min: number
-    _max: number
-    _rgb: string = `rgb(${this.red}, ${this.green}, ${this.blue})`
+    average: number = 0
+    valueCount: number = 0
+    valueMin: number
+    valueMax: number
 
-    constructor(private nav: NavController) { }
+    constructor(
+        private nav: NavController) { }
 
     ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
-
         for (let propName in changes) {
             let changedProp = changes[propName]
             if (propName == 'value')
@@ -74,13 +70,11 @@ export class SensorView implements OnChanges {
     }
 
     setValue(value) {
-        console.log('setting value', value)
-        if (!isNaN(value)) {
-            this._value = value
-            this._valueCount += 1
-            this._average = ((this._average * (this._valueCount - 1)) + this._value) / this._valueCount
-            this._min = this._min ? Math.min(this._min, value) : value
-            this._max = this._max ? Math.max(this._max, value) : value
+        if (!isNaN(this.value)) {
+            this.valueCount += 1
+            this.average = ((this.average * (this.valueCount - 1)) + this.value) / this.valueCount
+            this.valueMin = this.valueMin ? Math.min(this.valueMin, this.value) : this.value
+            this.valueMax = this.valueMax ? Math.max(this.valueMax, this.value) : this.value
         }
     }
 }

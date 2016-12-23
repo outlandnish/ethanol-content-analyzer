@@ -9,6 +9,10 @@ export interface State {
     streaming: boolean,
     device: FlexFuelDevice,
     data: FlexFuelData,
+    ethanol: number,
+    hasEthanol: boolean,
+    fuelPressure: number,
+    hasFuelPressure: boolean,
     error: boolean
 }
 
@@ -19,6 +23,10 @@ const initialState: State = {
     streaming: false,
     device: null,
     data: null,
+    ethanol: 0,
+    hasEthanol: false,
+    fuelPressure: 0,
+    hasFuelPressure: false,
     error: false
 }
 
@@ -77,7 +85,11 @@ export function reducer(state = initialState, action: flexfuel.Actions): State {
         case flexfuel.ActionTypes.DATA_FLEXFUEL_UPDATE:
             const dataUpdate = action.payload as FlexFuelData
             return Object.assign({}, state, {
-                data: dataUpdate
+                data: dataUpdate,
+                ethanol: dataUpdate.ethanol,
+                fuelPressure: dataUpdate.fuelPressure,
+                hasEthanol: dataUpdate.hasEthanol,
+                hasFuelPressure: dataUpdate.hasFuelPressure
             })
         case flexfuel.ActionTypes.DATA_FLEXFUEL_ERROR:
             console.log('data error')
@@ -96,7 +108,7 @@ export const getConnecting = (state: State) => state.connecting
 export const getStreaming = (state: State) => state.streaming
 export const getData = (state: State) => state.data
 export const getDevice = (state: State) => state.device
-export const getEthanol = (state: State) => state.data.ethanol
-export const getFuelPressure = (state: State) => state.data.fuelPressure
-export const getHasEthanol = (state: State) => state.data.hasEthanol
-export const getHasFuelPressure = (state: State) => state.data.hasFuelPressure
+export const getEthanol = (state: State) => state.ethanol
+export const getFuelPressure = (state: State) => state.fuelPressure
+export const getHasEthanol = (state: State) => state.hasEthanol
+export const getHasFuelPressure = (state: State) => state.hasFuelPressure
